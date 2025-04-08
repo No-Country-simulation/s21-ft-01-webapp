@@ -1,29 +1,42 @@
 import React from "react";
+import ModalValidation from "../components/modals/ModalValidation";
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormDataRegister, registerSchema } from "../schemas/register.schema";
+import { useEffect, useState } from "react";
 
 import RightSide from "../components/register/RightSide";
 import PersonalSection from "../components/register/PersonalSection";
 import NacionalitySection from "../components/register/NacionalitySection";
 import PrivateDataSection from "../components/register/PrivateDataSection";
 import FooterForm from "../components/register/FooterForm";
-// import { useAuth } from "../hooks/useAuth";
+import { useRegister } from "../hooks/useAuth";
+//import { useAuth } from "../hooks/useAuth";
 
 const Register: React.FC = () => {
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
 
     const { register, handleSubmit, control, trigger, setValue, formState: { errors } } = useForm<FormDataRegister>({
         resolver: zodResolver(registerSchema),
         mode: "all"
     })
 
-    // const { mutate: login, isSuccess, isPending, isError, error } = useAuth()
+    const { mutate: registerFunction, isSuccess, isPending, isError, error } = useRegister()
+
+    useEffect(() => {  
+        if (isSuccess) {  
+            setModalOpen(true); // Abrir modal si el registro es exitoso  
+        }  
+    }, [isSuccess]); 
+
 
 
     const onSubmit = (data: FormDataRegister) => {
-        // login(data)
-        console.log(data)
+        registerFunction(data);
+        console.log(data);
     }
 
 
@@ -42,19 +55,22 @@ const Register: React.FC = () => {
 
                 <PersonalSection register={register} errors={errors} />
 
-                <NacionalitySection register={register} errors={errors} trigger={trigger} setValue={setValue} />
+                <NacionalitySection register={register} control={control}  errors={errors} trigger={trigger} setValue={setValue} />
 
                 <PrivateDataSection control={control} register={register} errors={errors} />
 
                 <FooterForm
-                // isPending={isPending} errors={error}
+                isPending={isPending} errors={error}
                 />
+
+                <div> {isError && error && ( <p className="p-4 bg-red-200">{`${error.message}`} </p> )} </div>
             </form>
 
             <RightSide />
-        </div>
+            <ModalValidation isOpen={isModalOpen} onClose={() => setModalOpen(false)} />  
+        </div>  
 
-    )
+    );
 }
 
 export default Register;

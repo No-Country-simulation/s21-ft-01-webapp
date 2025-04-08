@@ -19,6 +19,7 @@ const AppRouter = () => {
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
 
+
           <Route path={ROUTES.NOTFOUND} element={<NotFound />} />
         </Routes>
       </Suspense>
