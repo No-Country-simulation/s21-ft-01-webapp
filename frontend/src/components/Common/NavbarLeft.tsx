@@ -7,7 +7,8 @@ import UserSVG from "../svg/UserSVG";
 import SettingsSVG from "../svg/SettingsSVG";
 import { useEffect, useState } from "react";
 import NavbarLeftItem from "./NavbarLeftItem";
-import HelpSVG from "../svg/HelpSVG";
+//import HelpSVG from "../svg/HelpSVG";
+//import Logout from "../svg/Logout";
 
 
 const NavbarLeft = () => {
@@ -73,6 +74,7 @@ const NavbarLeft = () => {
     }, [location.pathname])
 
     return (
+
         <div className="bg-secondary w-[30%] h-screen px-4 py-8 flex flex-col lg:w-[15%] items-center justify-between">
 
             <div className="w-full flex flex-col items-center">
@@ -94,25 +96,6 @@ const NavbarLeft = () => {
                     ))}
 
                 </nav>
-            </div>
-
-
-            <div
-                className="mt-12 gap-4 flex flex-col items-center w-[80%] text-white font-light">
-
-                <NavbarLeftItem
-                    to="about"
-                    title="Ayuda"
-                    isActive={urlActive === 'about'}
-                >
-                    {
-                        <HelpSVG
-                            viewBox="0 0 24 24"
-                            height={24}
-                            width={24}
-                        />
-                    }
-                </NavbarLeftItem>
             </div>
         </div>
     )

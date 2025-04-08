@@ -83,8 +83,8 @@ const AccountSummaryChart: React.FC = () => {
     };  
 
     return (  
-        <div className="p-4 w-full h-64 relative">  
-            <h1 className="text-l font-bold text-center text-[#FF6B6B] font-montserrat mb-2">Resumen de cuenta</h1>  
+        <div className="p-4 h-64 relative">  
+            <h1 className="text-xl font-bold text-center text-[#FF6B6B] font-montserrat mb-2">Resumen de cuenta</h1>  
             
             {/* Tarjetas de ingresos y gastos */}  
             <div className="flex justify-between mb-4 ">  

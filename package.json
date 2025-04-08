@@ -14,12 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^9.1.2",
-    "pg": "^8.13.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.5"
+    "concurrently": "^9.1.2"
   },
-  "devDependencies": {
-    "cors": "^2.8.5"
-  }
+  "devDependencies": {}
 }

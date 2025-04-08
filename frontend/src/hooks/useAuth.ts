@@ -51,6 +51,7 @@ export const useLogin = () => {
   });
 
   return mutation;
+<<<<<<< HEAD
 };
 
 
@@ -65,3 +66,4 @@ export const useAuth = () => {
     queryFn: getAuthStatus,
   })
 }*/
+

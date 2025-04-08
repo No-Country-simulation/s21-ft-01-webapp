@@ -3,21 +3,35 @@ import { Password } from "primereact/password";
 import Upload from '../../svgs/upload.svg';
 import { PropsFormSubcomponent } from "../../types/FormProps.types";
 import { FormDataRegister } from "../../schemas/register.schema";
-import { Controller} from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 
 const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
-    register,
     errors,
-    control
+    control,
+    register
 }) => {
 
     return (
         <>
 
             <div className="flex gap-2 items-center justify-between flex-wrap">
+
                 <div className="flex flex-col gap-4 grow-1">
                     <label htmlFor="dni">Dni o Pasaporte</label>
+                    <InputText
+                        placeholder="Dni o Pasaporte"
+                        {...register("dni")}
+                        id="dni"
+                        invalid={!!errors.dni}
+                    />
+                    {errors && errors.dni && (
+                        <small className="text-secondary">{errors.dni.message}</small>
+                    )}
+                </div>
+
+                <div className="flex flex-col gap-4 grow-1">
+                    <label htmlFor="dni_file">Dni o Pasaporte</label>
 
                     <div
                         className="relative flex items-center"
@@ -25,10 +39,10 @@ const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
                         <InputText
                             type="file"
                             className="w-full"
-                            id="dni"
-                            invalid={!!errors.dni}
+                            id="dni_file"
+                        // invalid={!!errors.dni_file}
 
-                            {...register('dni')} // Vincula el campo 'country_fk' a react-hook-form
+                        // {...register('dni_file')}
 
                         />
                         <img
@@ -36,9 +50,9 @@ const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
                             src={Upload} />
                     </div>
 
-                    {errors.dni && (
-                        <small className="text-secondary">{errors.dni?.message}</small>
-                    )}
+                    {/* {errors.dni_file && (
+                        <small className="text-secondary">{errors.dni_file?.message}</small>
+                    )} */}
                 </div>
 
             </div>

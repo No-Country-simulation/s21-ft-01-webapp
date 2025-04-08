@@ -1,9 +1,11 @@
 import { Link } from "react-router";
 import BlueButton from "../buttons/BlueButton";
+import { FieldErrors } from "react-hook-form";
+import { FormDataRegister } from "../../schemas/register.schema";
 
 interface FooterProps {
     isPending?: boolean,
-    errors?: Error | null
+    errors?: FieldErrors<FormDataRegister>,
 }
 
 const FooterForm: React.FC<FooterProps> = ({
@@ -18,8 +20,8 @@ const FooterForm: React.FC<FooterProps> = ({
                     className="w-full"
                     label="Registrarse"
                     type="submit"
-                // disabled={Object.keys(errors!).length > 0}
-                // loading={isPending}
+                    disabled={Object.keys(errors!).length > 0}
+                    loading={isPending}
                 />
 
                 <small

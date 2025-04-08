@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';  
 import { useNavigate } from 'react-router-dom';  
-import Capycash from 'frontend/src/svgs/Capycash';  
+import Capycash from 'frontend/src/svgs/capycash.svg';  
 
 interface ModalTransferenciaProps {  
     isOpen: boolean;  

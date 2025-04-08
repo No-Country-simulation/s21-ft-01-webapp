@@ -18,7 +18,7 @@ export class CountryService {
 
     public async getAll() {
         try {
-            const countries = await Country.findAll();
+            const countries = await Country.findAll({ attributes: { exclude: ['createdAt', 'updatedAt'] } });
 
             if (countries.length <= 0) throw new Error('No countries found')
 
@@ -33,7 +33,7 @@ export class CountryService {
     public async getByID(id: number) {
 
         try {
-            const country = await Country.findByPk(id);
+            const country = await Country.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt'] } });
 
             if (!country) throw new Error('Country not found')
 
@@ -55,10 +55,10 @@ export class CountryService {
     public async update(name: string, id: number) {
 
         try {
-            const country = await Country.findByPk(id);
+            const country = await Country.findByPk(id, { attributes: { exclude: ['createdAt'] } });
 
             if (!country) throw new Error('Country not found')
-
+            if (country.name == name) throw new Error('Country name is not different')
             country.name = name;
 
             await country.save();

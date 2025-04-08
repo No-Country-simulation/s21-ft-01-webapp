@@ -49,12 +49,13 @@ export class CityController {
     }
 
     update = (req: Request, res: Response) => {
-        const { name } = req.body
+        let { name, country_id } = req.body
         const { id } = req.params
 
-        const numberId = Number(id)
+        const nId = Number(id)
+        let nCountry_id = Number(country_id)
 
-        this.cityService.update(name, numberId)
+        this.cityService.update(nId, name, nCountry_id)
             .then((data) => res.json(data))
             .catch(error => res.status(400).json({ error: error.message }))
     }

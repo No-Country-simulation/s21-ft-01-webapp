@@ -1,9 +1,9 @@
-import { lazy } from "react";
 import ProtectedRoute from "../ProtectedRoute";
 import { ROUTES } from "../routes";
 import HistoryPage from "../../pages/HistoryPage";
+import Dashboard from "../../pages/Dashboard";
 
-const Dashboard = lazy(() => import("../../pages/Dashboard"));
+
 
 export const PrivateRoutes = [
   {

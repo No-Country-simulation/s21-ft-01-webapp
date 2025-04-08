@@ -4,7 +4,10 @@ import { phoneRegex } from '../utils/regex';
 export const registerSchema = z.object({
     name: z
         .string({ invalid_type_error: "El formato introducido es incorrecto." })
-        .min(1, { message: "Debes introducir tu nombre y apellido" }),
+        .min(1, { message: "Debes introducir tu nombre" }),
+    last_name: z
+        .string({ invalid_type_error: "El formato introducido es incorrecto." })
+        .min(1, { message: "Debes introducir tu apellido" }),
     email: z
         .string({ invalid_type_error: "El formato introducido es incorrecto." })
         .email({ message: "Debes introducir un email valido." }),
@@ -16,18 +19,24 @@ export const registerSchema = z.object({
     phone: z
         .string()
         .refine((val) => phoneRegex.test(val), { message: "Número de teléfono invalido." }),
-    country_fk: z
+    country_id: z
         .number({ message: "Ingresa un país.", invalid_type_error: "El formato introducido es incorrecto." }),
-        city_fk: z
+    city_id: z
         .number({ message: "Ingresa una ciudad.", invalid_type_error: "El formato introducido es incorrecto." }),
-    // dni: z
-    //     .instanceof(File)  // Asegúrate de que sea una instancia de File
+    address: z
+        .string({ message: "Ingrese su dirección" }),
+    dni: z
+        .string({ invalid_type_error: "El formato introducido es incorrecto" })
+        .min(1, { message: "Debes introducir tu número de Dni o Pasaporte" }),
+
+    // dni_photo: z
+    //     .instanceof(File)
     //     .refine(
-    //         (file) => file?.size > 0,  // Verifica que el archivo tenga un tamaño mayor a 0
+    //         (file) => file?.size > 0,
     //         { message: "Por favor, carga un archivo de DNI." }
     //     )
     //     .refine(
-    //         (file) => file?.type === 'application/pdf',  // Verifica que el archivo sea un PDF
+    //         (file) => file?.type === 'application/pdf',
     //         { message: "El archivo debe ser un PDF." }
     //     ),
     password: z
@@ -39,7 +48,7 @@ export const registerSchema = z.object({
 
 }).refine((data) => data.password === data.repeatpwd, {
     message: "Las contraseñas no coinciden",
-    path: ["repeatpwd"], // Puedes especificar el campo donde debe aparecer el error
+    path: ["repeatpwd"],
 });
 
 

@@ -41,7 +41,7 @@ class Account extends Model {
         tableName: "account",
         hooks: {
           beforeCreate: async (account) => {
-            account.account_number = `acc-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            account.account_number = `${Date.now()}${Math.floor(Math.random() * 1000)}`;
           },
         },
       }

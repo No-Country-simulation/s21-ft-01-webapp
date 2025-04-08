@@ -2,7 +2,7 @@ import { Skeleton } from 'primereact/skeleton';
 
 export default function SkeletonLoading () {
   return (
-    <div className="border-round border-1 surface-border p-4 surface-card">
+    <div className="w-full h-full border-round border-1 surface-border p-4 surface-card">
       <div className="flex mb-3">
         <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
         <div>

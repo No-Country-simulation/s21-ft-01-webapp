@@ -2,88 +2,107 @@ import { Dropdown } from "primereact/dropdown";
 import { PropsFormSubcomponent } from "../../types/FormProps.types";
 import { FormDataRegister } from "../../schemas/register.schema";
 import { useState } from "react";
+import { useCountries } from "../../hooks/useCountry";
+import { useCities } from "../../hooks/useCities";
+import { InputText } from "primereact/inputtext";
 
 const NacionalitySection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
     errors,
     setValue,
-    trigger
+    trigger,
+    register
 }) => {
-
-    const countries = [
-        { id: 1, name: "Argentina", code: "AR" },
-        { id: 2, name: "Brazil", code: "BR" },
-        { id: 3, name: "United States", code: "US" }
-    ];
-
-    const cities = [
-        { id: 1, name: "Formosa", code: "AR" },
-        { id: 2, name: "Gremio", code: "BR" },
-        { id: 3, name: "Chubut", code: "US" }
-    ];
 
     const [selectedCountry, setSelectedCountry] = useState<number | null>(null);
     const [selectedCity, setSelectedCity] = useState<number | null>(null);
 
+
+    const { data: countries, isLoading: isLoadingCountries } = useCountries();
+    const { data: cities, isLoading: isLoadingCities } = useCities(selectedCountry)
+
     return (
         <>
-            <div className="flex gap-2 items-center justify-between flex-wrap">
+            <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex flex-col gap-4 grow-1" >
-                    <label htmlFor="country_fk">País</label>
+                    <label htmlFor="country_id">País</label>
                     <Dropdown
                         value={selectedCountry}
                         options={countries}
                         optionLabel="name"
-                        placeholder="Seleccione un país"
-                        optionValue="id"
-                        className="grow-1 w-full"
+                        placeholder={`${isLoadingCountries ? 'Cargando' : 'Seleccione un país'}`}
+                        emptyMessage="No hay paises disponibles"
+                        optionValue="country_id"
+                        className="w-full grow-1"
                         pt={{
                             root: {
                                 style: { width: "100%" }
                             }
                         }}
-                        id="country_fk"
-                        invalid={!!errors.country_fk}
+                        id="country_id"
+                        invalid={!!errors.country_id}
                         onChange={(e) => {
-                            const countryId = Number(e.value); // Asegúrate de que el valor sea un número
+                            const countryId = Number(e.value)
                             console.log("ID seleccionado:", countryId);
                             setSelectedCountry(countryId);
-                            setValue!("country_fk", countryId, { shouldValidate: true });
-                            trigger!("country_fk");
+                            setValue!("country_id", countryId, { shouldValidate: true });
+                            trigger!("country_id");
                         }}
+                        loading={isLoadingCountries}
                     />
 
-                    {errors && errors.country_fk && (
-                        <small className="text-secondary">{errors.country_fk.message}</small>
+                    {errors && errors.country_id && (
+                        <small className="text-secondary">{errors.country_id.message}</small>
                     )}
                 </div>
 
                 <div className="flex flex-col gap-4 grow-1">
-                    <label htmlFor="city_fk">Ciudad</label>
+                    <label htmlFor="city_id">Ciudad</label>
                     <Dropdown
                         value={selectedCity}
                         options={cities}
                         optionLabel="name"
-                        placeholder="Seleccione una ciudad"
-                        optionValue="id"
-                        className="grow-1 w-full"
+                        placeholder={`${isLoadingCities ? 'Cargando' : 'Seleccione una ciudad'}`}
+                        loading={!!isLoadingCities}
+                        optionValue="city_id"
+                        emptyMessage="No hay ciudades disponibles"
+                        className="w-full grow-1"
                         pt={{
                             root: {
                                 style: { width: "100%" }
                             }
                         }}
-                        id="city_fk"
-                        invalid={!!errors.city_fk}
+                        id="city_id"
+                        invalid={!!errors.city_id}
                         onChange={(e) => {
-                            const cityId = Number(e.value); // Asegúrate de que el valor sea un número
+                            const cityId = Number(e.value);
                             setSelectedCity(cityId);
-                            setValue!("city_fk", cityId, { shouldValidate: true });
-                            trigger!("city_fk");
+                            setValue!("city_id", cityId, { shouldValidate: true });
+                            trigger!("city_id");
                         }}
                     />
-                    {errors && errors.city_fk && (
-                        <small className="text-secondary">{errors.city_fk.message}</small>
+                    {errors && errors.city_id && (
+                        <small className="text-secondary">{errors.city_id.message}</small>
                     )}
                 </div>
+
+
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-2">
+
+                <div className="flex flex-col gap-4 grow-1">
+                    <label htmlFor="address">Dirección</label>
+                    <InputText
+                        placeholder="Dirección"
+                        {...register("address")}
+                        id="address"
+                        invalid={!!errors.address}
+                    />
+                    {errors && errors.address && (
+                        <small className="text-secondary">{errors.address.message}</small>
+                    )}
+                </div>
+
             </div>
         </>
     )

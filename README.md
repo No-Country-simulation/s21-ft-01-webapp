@@ -122,7 +122,7 @@ Pago de servicios básicos (Versión 2 - Roadmap).
 
 [Prototipo en Figma](https://www.figma.com/design/VpWXanmp80tjBfjuKaGUHs/Bank-APP-No-country?node-id=1-2&t=XZ6w55bgA2ckAmAl-0)
 
-
+[DOcumentacion](https://www.notion.so/Equipo-S21-01-FT-WEBAPP-19a69513e5f180e2b129dcce698ae46c)
   
 
 ## 👥 Equipo de Desarrollo
