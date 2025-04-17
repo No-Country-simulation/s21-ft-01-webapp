@@ -22,8 +22,8 @@ export class OperationRoutes {
         router.get('/user/:user_id', controller.getByUserID);
         router.post('/', controller.create);
         router.post('/reverse', controller.reverse);
-        // router.patch('/:id', controller.update);
-        // router.delete('/:id', controller.deleteByID);
+        //router.patch('/:id', controller.update);
+        router.delete('/:id', controller.deleteByID);
 
         return router;
     }

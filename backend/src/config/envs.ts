@@ -1,9 +1,12 @@
 import { get } from "env-var";
 import fs from 'fs';
+import dotenv from 'dotenv';
 
 if (fs.existsSync('.env')) {
-    process.loadEnvFile();
-    console.log('.env exists')
+    dotenv.config();
+    console.log('.env existsand variables are loaded');
+} else {
+    console.error('.env file does not exist');
 }
 
 

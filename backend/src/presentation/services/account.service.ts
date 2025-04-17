@@ -38,12 +38,12 @@ export class AccountService {
     try {
       const account = await Account.findByPk(account_id);
 
-      if (!account) throw new Error('Account not found')
+      if (!account) throw new Error('Account not found');
 
       return account.balance;
 
     } catch (error) {
-      throw new Error(`Internal server error: ${error}`)
+      throw new Error(`Internal server error: ${error instanceof Error ? error.message : error}`); 
     }
 
   }
@@ -53,16 +53,16 @@ export class AccountService {
     try {
       const account = await Account.findByPk(account_id);
 
-      if (!account) throw new Error('Account not found')
+      if (!account) throw new Error('Account not found');
 
       account.balance = balance;
 
-      account.save()
+      await account.save();
 
-      return
+      return account;
 
     } catch (error) {
-      throw new Error(`Internal server error: ${error}`)
+      throw new Error(`Internal server error: ${error instanceof Error ? error.message : error}`); 
     }
 
   }

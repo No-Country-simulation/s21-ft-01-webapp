@@ -54,7 +54,7 @@ export class AuthService {
             const token = await JwtAdapter.generateToken({
                 user_id: newUser.user_id,
                 name: newUser.name,
-                last_name: newUser.last_name
+                last_name: newUser.last_name,
             });
 
 
@@ -75,7 +75,10 @@ export class AuthService {
         const isMatch = await bcryptAdapter.compare(password, user.password);
         if (!isMatch) return null;
 
-        const token = jwt.sign({ userLogin }, SECRET_KEY, { expiresIn: "1h" });
+        const token = jwt.sign({ 
+            user_id: userLogin.user_id,
+        }, SECRET_KEY, { expiresIn: "1h" });
+
         return {token, userLogin};
     }
 

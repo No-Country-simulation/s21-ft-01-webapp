@@ -6,14 +6,20 @@ export class UserService {
 
     constructor() { }
 
+    private generateAccountNumber(): string {  
+        return 'ACC-' + Date.now();
+    } 
+
     public async create(user: any) {
         try {
 
             await this.getByDni(user.dni);
             user.status = false;
             user.password = bcryptAdapter.hash(user.password);
-            const newUser = await User.create(user)
-            return newUser
+            user.user_account_id = this.generateAccountNumber();
+            
+            const newUser = await User.create(user);
+            return newUser;
 
         } catch (error) {
             throw new Error(`Internal server error: ${error}`)

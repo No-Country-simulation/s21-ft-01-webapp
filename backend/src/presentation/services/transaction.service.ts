@@ -7,7 +7,7 @@ import { AccountService } from './account.service';
 interface TransactionInfo {
     operation_id: number;
     date: string;
-    ammount: number;
+    amount: number;
     is_income: boolean;
     sender_account_id: number;
     reciever_account_id: number;
@@ -18,7 +18,7 @@ interface TransactionInfo {
 interface CreateTransaction {
     operation_id: number,
     date: string,
-    ammount: number,
+    amount: number,
     is_income: boolean,
     balance_before: number,
     balance_after: number,
@@ -52,20 +52,20 @@ export class TransactionService {
             const sender: CreateTransaction = {
                 operation_id: transactionInfo.operation_id,
                 date: transactionInfo.date,
-                ammount: transactionInfo.ammount,
+                amount: transactionInfo.amount,
                 is_income: transactionInfo.is_income,
                 balance_before: transactionInfo.senderBalanceBefore,
-                balance_after: transactionInfo.senderBalanceBefore - transactionInfo.ammount,
+                balance_after: transactionInfo.senderBalanceBefore - transactionInfo.amount,
                 account_id: transactionInfo.sender_account_id
             }
 
             const reciever: CreateTransaction = {
                 operation_id: transactionInfo.operation_id,
                 date: transactionInfo.date,
-                ammount: transactionInfo.ammount,
+                amount: transactionInfo.amount,
                 is_income: !transactionInfo.is_income,
                 balance_before: transactionInfo.recieverBalanceBefore,
-                balance_after: transactionInfo.recieverBalanceBefore + transactionInfo.ammount,
+                balance_after: transactionInfo.recieverBalanceBefore + transactionInfo.amount,
                 account_id: transactionInfo.reciever_account_id
             }
 
@@ -224,7 +224,7 @@ export class TransactionService {
             attributes: [
                 [Sequelize.fn("TO_CHAR", Sequelize.col("date"), "YYYY-MM"), "year_month"],
                 "is_income",
-                [Sequelize.fn("SUM", Sequelize.col("ammount")), "total_amount"]
+                [Sequelize.fn("SUM", Sequelize.col("amount")), "total_amount"]
             ],
             where: { account_id: accountId },
             group: ["year_month", "is_income"],
@@ -235,8 +235,8 @@ export class TransactionService {
         // 2️⃣ Obtener los totales de ingresos y egresos
         const totalAmounts = await Transaction.findOne({
             attributes: [
-                [Sequelize.fn("SUM", Sequelize.literal("CASE WHEN is_income = true THEN ammount ELSE 0 END")), "total_income"],
-                [Sequelize.fn("SUM", Sequelize.literal("CASE WHEN is_income = false THEN ammount ELSE 0 END")), "total_expense"]
+                [Sequelize.fn("SUM", Sequelize.literal("CASE WHEN is_income = true THEN amount ELSE 0 END")), "total_income"],
+                [Sequelize.fn("SUM", Sequelize.literal("CASE WHEN is_income = false THEN amount ELSE 0 END")), "total_expense"]
             ],
             where: { account_id: accountId },
             raw: true

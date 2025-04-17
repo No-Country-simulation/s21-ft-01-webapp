@@ -14,14 +14,14 @@ export class OperationService {
         
 
         try {
-           
+        
 
             switch (operation.operation_type_id) {
 
                 case 1: {
 
                     const senderBalanceBefore = await this.accountService.getAccountBalance(operation.sender_account_id)
-                    if (senderBalanceBefore < operation.ammount) throw new Error(`Balance is lower than operation ammount`);
+                    if (senderBalanceBefore < operation.amount) throw new Error(`Balance is lower than operation amount`);
 
                     operation.senderBalanceBefore = senderBalanceBefore
                     operation.recieverBalanceBefore = await this.accountService.getAccountBalance(operation.reciever_account_id)
@@ -90,13 +90,13 @@ export class OperationService {
     }
 
 
-    // public async getByName(name: string) {
+    public async getByName(name: string) {
 
-    //     const operation = await Operation.findOne({ where: { name } })
+        const operation = await Operation.findOne({ where: { name } })
 
-    //     if (operation) throw new Error('Operation already exists')
-    //     return
-    // }
+        if (operation) throw new Error('Operation already exists')
+        return
+    }
 
     //TODO: Implementar reversa
     public async reverse(id: number) {
@@ -106,9 +106,9 @@ export class OperationService {
 
             if (!operation) throw new Error('Operation not found')
 
-            // operation.name = name;
+            //operation.name = name;
 
-            // await operation.save();
+            await operation.save();
 
             return operation
 

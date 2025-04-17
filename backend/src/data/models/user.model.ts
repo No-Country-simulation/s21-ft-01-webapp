@@ -33,10 +33,12 @@ class User extends Model {
                 email: {
                     type: DataTypes.STRING,
                     allowNull: false,
+                    unique: true,
                 },
                 dni: {
                     type: DataTypes.STRING,
                     allowNull: false,
+                    unique: true,
                 },
                 dni_url: {
                     type: DataTypes.STRING,
@@ -67,8 +69,7 @@ class User extends Model {
                 city_id: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
-                },
-
+                }
             },
             {
                 sequelize,

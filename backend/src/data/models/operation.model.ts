@@ -3,7 +3,7 @@ import { Model, DataTypes, Sequelize } from "sequelize";
 class Operation extends Model {
     public operation_id!: number;
     public date!: string;
-    public ammount!: number;
+    public amount!: number;
     public transaction_type_id!: number;
     public user_id!: number;
 
@@ -20,7 +20,7 @@ class Operation extends Model {
                     allowNull: false,
                     defaultValue: new Date()
                 },
-                ammount: {
+                amount: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },

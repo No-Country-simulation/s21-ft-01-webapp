@@ -3,7 +3,7 @@ import { Model, DataTypes, Sequelize } from "sequelize";
 class Transaction extends Model {
     public transaction_id!: number;
     public date!: string;
-    public ammount!: number;
+    public amount!: number;
     public is_income!: boolean;
     public balance_before!: number;
     public balance_after!: number;
@@ -22,7 +22,7 @@ class Transaction extends Model {
                     type: DataTypes.DATE,
                     allowNull: false,
                 },
-                ammount: {
+                amount: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
                 },

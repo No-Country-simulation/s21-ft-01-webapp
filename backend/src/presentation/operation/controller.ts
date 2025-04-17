@@ -12,7 +12,7 @@ export class OperationController {
         const {
             user_id,
             operation_type_id,
-            ammount,
+            amount,
             sender_account_id,
             reciever_account_id,
             is_income } = req.body
@@ -20,7 +20,7 @@ export class OperationController {
         const operation = {
             user_id,
             operation_type_id,
-            ammount,
+            amount,
             sender_account_id,
             reciever_account_id,
             is_income
@@ -69,14 +69,14 @@ export class OperationController {
             .catch(error => res.status(400).json({ error: error.message }))
     }
 
-    // deleteByID = (req: Request, res: Response) => {
-    //     const { id } = req.params
+    deleteByID = (req: Request, res: Response) => {
+        const { id } = req.params
 
-    //     const numberId = Number(id)
+        const numberId = Number(id)
 
-    //     this.operationService.deleteByID(numberId)
-    //         .then((data) => res.json(data))
-    //         .catch(error => res.status(400).json({ error: error.message }))
-    // }
+        this.operationService.deleteByID(numberId)
+            .then((data) => res.json(data))
+            .catch(error => res.status(400).json({ error: error.message }))
+    }
 
 }

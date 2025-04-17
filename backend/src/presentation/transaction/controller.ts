@@ -67,25 +67,25 @@ export class TransactionController {
     };
 
 
-    // update = (req: Request, res: Response) => {
-    //     const { name } = req.body
-    //     const { id } = req.params
+    update = (req: Request, res: Response) => {
+        const { name } = req.body
+        const { id } = req.params
 
-    //     const numberId = Number(id)
+        const numberId = Number(id)
 
-    //     this.transactionService.update(name, numberId)
-    //         .then((data) => res.json(data))
-    //         .catch(error => res.status(400).json({ error: error.message }))
-    // }
+        this.transactionService.update(name, numberId)
+            .then((data) => res.json(data))
+            .catch(error => res.status(400).json({ error: error.message }))
+    }
 
-    // deleteByID = (req: Request, res: Response) => {
-    //     const { id } = req.params
+    deleteByID = (req: Request, res: Response) => {
+        const { id } = req.params
 
-    //     const numberId = Number(id)
+        const numberId = Number(id)
 
-    //     this.transactionService.deleteByID(numberId)
-    //         .then((data) => res.json(data))
-    //         .catch(error => res.status(400).json({ error: error.message }))
-    // }
+        this.transactionService.deleteByID(numberId)
+            .then((data) => res.json(data))
+            .catch(error => res.status(400).json({ error: error.message }))
+    }
 
 }
