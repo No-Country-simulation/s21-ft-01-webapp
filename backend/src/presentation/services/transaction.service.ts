@@ -8,11 +8,11 @@ interface TransactionInfo {
     operation_id: number;
     date: string;
     amount: number;
-    is_income: boolean;
+    is_income: boolean; 
     sender_account_id: number;
-    reciever_account_id: number;
+    receiver_account_id: number;
     senderBalanceBefore: number;
-    recieverBalanceBefore: number;
+    receiverBalanceBefore: number;
 }
 
 interface CreateTransaction {
@@ -59,19 +59,19 @@ export class TransactionService {
                 account_id: transactionInfo.sender_account_id
             }
 
-            const reciever: CreateTransaction = {
+            const receiver: CreateTransaction = {
                 operation_id: transactionInfo.operation_id,
                 date: transactionInfo.date,
                 amount: transactionInfo.amount,
                 is_income: !transactionInfo.is_income,
-                balance_before: transactionInfo.recieverBalanceBefore,
-                balance_after: transactionInfo.recieverBalanceBefore + transactionInfo.amount,
-                account_id: transactionInfo.reciever_account_id
+                balance_before: transactionInfo.receiverBalanceBefore,
+                balance_after: transactionInfo.receiverBalanceBefore + transactionInfo.amount,
+                account_id: transactionInfo.receiver_account_id 
             }
 
 
             await this.create(sender);
-            await this.create(reciever);
+            await this.create(receiver);
             return
 
         } catch (error) {

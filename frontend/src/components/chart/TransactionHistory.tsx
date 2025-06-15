@@ -1,34 +1,33 @@
 import React, { useState } from 'react';  
 import { Button } from 'primereact/button';  
-import { DataTable } from 'primereact/datatable';  
-import { Column } from 'primereact/column';  
-import { IconTrendingUp, IconCashBanknote, IconShoppingBag, IconTrendingDown, IconToolsKitchen3, IconShirtSport, IconBusStop, IconMasksTheater, IconHeartbeat, IconProps } from '@tabler/icons-react';    
-import { formatDateSection, formatDateTime } from '../../utils/date';  
+import { DataTable } from 'primereact/datatable';   
+//import { useQuery } from '@tanstack/react-query';   
+import { Column } from 'primereact/column'; 
+import { IconTrendingUp, IconCashBanknote, IconShoppingBag, IconTrendingDown, IconToolsKitchen3, IconShirtSport, IconBusStop, IconMasksTheater, IconHeartbeat, IconProps } from '@tabler/icons-react';  
+import { formatDateTime } from '../../utils/date';  
 import { MonthPickerDemo } from './MonthPicker';  
 
+// Interfaz para las transacciones  
 interface Transaction {  
     id: string;  
     date: string;  
-    to: string;  
-    category: string;  
+    to: string; 
+    category: string; 
     amount: number;  
 }  
 
-interface TransactionHistoryProps {  
-    transactions: Transaction[];  
-}  
-
-// Ejemplo de transacciones (ahora inicializado como un array vacío)  
+// Ejemplo de transacciones (inicializado como un array vacío)  
 const initialTransactions: Transaction[] = [  
     { id: '1', date: '2025-03-05', to: 'Restaurante', category: 'Comida', amount: -50 },  
     { id: '2', date: '2025-03-05', to: 'Tienda de ropa', category: 'Indumentaria', amount: -100 },  
     { id: '3', date: '2025-03-06', to: 'Subte', category: 'Transporte', amount: -5 },  
     { id: '4', date: '2025-03-06', to: 'Cine', category: 'Entretenimiento', amount: -25 },  
     { id: '5', date: '2025-03-07', to: 'Farmacia', category: 'Salud', amount: -30 },  
-    { id: '6', date: '2025-03-07', to: 'Empresa', category: 'Acreditacion de sueldo', amount: 2000 },  
+    { id: '6', date: '2025-03-07', to: 'Empresa', category: 'Sueldo', amount: 2000 },  
     { id: '7', date: '2025-03-07', to: 'Supermercado', category: 'otros', amount: -80 },  
-];  
+];   
 
+//Estilos de categoría 
 interface CategoryStyle {  
     icon: React.FC<IconProps>;  
     color: string;  
@@ -43,48 +42,44 @@ const categoryStyles: { [key: string]: CategoryStyle } = {
     'Salud': { icon: IconHeartbeat, color: '#FF6B6B', labelColor: '#fcc5b6' },  
     'Sueldo': { icon: IconCashBanknote, color: '#FF6B6B', labelColor: '#abebc6' },  
     'otros': { icon: IconShoppingBag, color: '#FF6B6B', labelColor: '#c6fefc' },  
-};  
+}; 
+
+// Obtener las transacciones desde el backend  
+//const fetchTransactions = async (): Promise<Transaction[]> => {  
+//    const response = await fetch('http://localhost:3000/api/transaction');  
+//    if (!response.ok) {  
+//        throw new Error('Error al recuperar las transacciones');  
+//    }  
+//    return response.json();  
+//};  
 
 const TransactionHistory: React.FC = () => {  
-    const [selectedMonth, setSelectedMonth] = useState<Date | null>(null);  
-    const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);  
+    const [selectedMonth, setSelectedMonth] = useState<Date | null>(null); 
 
-    // Filtro transacciones por mes  
+
+    // Obtener transacciones del backend  
+    //const { data: transactions = [], error, isLoading, isError } = useQuery({  
+      //  queryKey: ['transactions'],  
+        ///queryFn: fetchTransactions,  
+    //});  
+
+    // Usar datos de ejemplo
+    const transactions = initialTransactions;   
+
+    // Manejo de errores y carga  
+    //if (isLoading) return <p>Cargando...</p>;  
+   // if (isError) return <p>Error: {error?.message}</p>;  
+
+    // Filtro de transacciones por mes  
     const filteredTransactions = selectedMonth  
         ? transactions.filter(transaction => {  
             const transactionDate = new Date(transaction.date);  
             return (  
-                transactionDate.getFullYear() === selectedMonth?.getFullYear() &&  
-                transactionDate.getMonth() === selectedMonth?.getMonth()  
+                transactionDate.getFullYear() === selectedMonth.getFullYear() &&  
+                transactionDate.getMonth() === selectedMonth.getMonth()  
             );  
         })  
-        : transactions;  
-
-    // Función para el botón "Ver Transferencia"  
-    const actionBodyTemplate = (rowData: Transaction) => {  
-        return (  
-            <Button  
-                label="Ver Transferencia"  
-                title="Ver detalles de la transferencia"  
-                className="w-full mt-1 px-1 py-1 bg-primary text-white rounded-lg font-monserrat hover:bg-primary-dark transition-colors text-xs"  
-                style={{ height: '1.25rem', fontSize: '0.6rem' }}  
-                onClick={() => alert(`Ver transferencia ${rowData.id}`)}  
-                aria-label={`Ver detalles de la transferencia ${rowData.id}`}   
-            />  
-        );  
-    };  
-
-    // Función para mostrar el icono de flecha  
-    const amountIconBodyTemplate = (rowData: Transaction) => {  
-        const isIncome = rowData.amount > 0;  
-        return isIncome ? <IconTrendingUp size={20} color="blue" /> : <IconTrendingDown size={20} color="blue" />;  
-    };  
-
-    // Función para formatear el monto  
-    const amountBodyTemplate = (rowData: Transaction) => {  
-        const formattedAmount = rowData.amount.toFixed(2);  
-        return rowData.amount >= 0 ? `$${formattedAmount}` : `-$${Math.abs(rowData.amount).toFixed(2)}`;  
-    };  
+        : transactions; 
 
     // Agrupar las transacciones por día  
     const groupTransactionsByDate = (transactions: Transaction[]) => {  
@@ -99,7 +94,32 @@ const TransactionHistory: React.FC = () => {
         return grouped;  
     };  
 
-    const groupedTransactions = groupTransactionsByDate(filteredTransactions);  
+    const groupedTransactions = groupTransactionsByDate(filteredTransactions);         
+        
+    // Función para el botón "Ver Transferencia"  
+    const actionBodyTemplate = (rowData: Transaction) => (   
+            <Button  
+                label="Ver Transferencia"  
+                title="Ver detalles de la transferencia"  
+                className="w-full mt-1 px-1 py-1 bg-primary text-white rounded-lg font-monserrat hover:bg-primary-dark transition-colors text-xs"  
+                style={{ height: '1.25rem', fontSize: '0.6rem' }}  
+                onClick={() => alert(`Ver transferencia ${rowData.id}`)}  
+                aria-label={`Ver detalles de la transferencia ${rowData.id}`}   
+            />  
+    );  
+    
+
+     // Función para mostrar el icono de flecha  
+    const amountIconBodyTemplate = (rowData: Transaction) => {  
+        const isIncome = rowData.amount > 0;  
+        return isIncome ? <IconTrendingUp size={20} color="blue" /> : <IconTrendingDown size={20} color="blue" />;  
+    };  
+
+    // Función para formatear el monto  
+    const amountBodyTemplate = (rowData: Transaction) => {  
+        const formattedAmount = rowData.amount.toFixed(2);  
+        return rowData.amount >= 0 ? `$${formattedAmount}` : `-$${Math.abs(rowData.amount).toFixed(2)}`;  
+    };  
 
     // Etiqueta de categoría con color  
     const categoryBodyTemplate = (rowData: Transaction) => {  
@@ -107,13 +127,13 @@ const TransactionHistory: React.FC = () => {
         const categoryStyle = {  
             backgroundColor: categoryInfo.labelColor,  
             color: categoryInfo.color,  
-            padding: '0.25rem 0.15rem',  
+            padding: '0.15rem 0.15rem',  
             borderRadius: '0.25rem',  
             display: 'inline-flex',  
             alignItems: 'center',  
             fontFamily: 'Montserrat, sans-serif',  
             fontSize: '0.5rem',  
-        };  
+        }; 
 
         const circleStyle = {  
             display: 'inline-block',  
@@ -145,38 +165,37 @@ const TransactionHistory: React.FC = () => {
     };  
 
     return (  
-        <div className="container mx-auto p-4 font-montserrat relative">  
+        <div className="container mx-0 p-4 font-montserrat relative">  
             <div className="flex items-center justify-between mb-4">  
-                <h1 className="text-xl font-bold underline text-blue-500 font-montserrat">Historial</h1> 
-                <div className="z-50 relative">
-                <MonthPickerDemo selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} /> 
-                </div> 
+                <h1 className="text-2xl md:text-3xl font-bold underline text-blue-500">Historial</h1>  
+                <div className="z-50 relative">  
+                    <MonthPickerDemo selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />  
+                </div>  
             </div> 
 
+            {/* Renderiza las transacciones agrupadas */} 
+
             {Object.entries(groupedTransactions).map(([date, transactions]) => (  
-                <div key={date} className="mb-1 border-b pb-1">   
-                    <DataTable value={transactions} responsiveLayout="scroll" className=""  
+                <div key={date} className="border-b">  
+                    <DataTable  
+                        value={transactions}  
+                        responsiveLayout="scroll"  
+                        className="table-auto w-full"  
                         style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem' }}  
                         tableStyle={{ borderCollapse: 'collapse' }}  
-                        rowGroupMode="subheader"  
-                        sortMode="single" 
-                        rowGroupHeaderTemplate={() => (  
-                            <div className="text-lg font-semibold text-[#FF6B6B] font-montserrat py-1">  
-                                {formatDateSection(date)}  
-                            </div>  
-                        )}  
                     >  
-                        <Column body={categoryIconBodyTemplate} style={{ width: '0.2rem'}} />  
+                        {/* Columnas de la tabla */}  
+                        <Column body={categoryIconBodyTemplate} style={{ width: '0.5rem' }} />  
                         <Column body={(rowData: Transaction) => (  
-                            <div style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem', lineHeight: 'normal', width:'10rem' }}>  
+                            <div style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem', lineHeight: 'normal', width: '8rem' }}>  
                                 <div style={{ fontWeight: 'bold' }}>{rowData.to}</div>  
                                 <div>{formatDateTime(rowData.date)}</div>  
                             </div>  
                         )} style={{ flexGrow: 1 }} />  
                         <Column field="category" body={categoryBodyTemplate} style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.75rem' }} headerStyle={{ color: '#FF6B6B', fontSize: '0.8rem' }} />  
                         <Column body={amountIconBodyTemplate} style={{ width: '0.5rem' }} />  
-                        <Column body={amountBodyTemplate} style={{ width:'0.5rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem' }} />  
-                        <Column body={actionBodyTemplate} style={{ width: '2rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem' }} />  
+                        <Column body={amountBodyTemplate} style={{ width: '0.5rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem' }} />  
+                        <Column body={actionBodyTemplate} style={{ width: '1rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.5rem' }} />  
                     </DataTable>  
                 </div>  
             ))}  
@@ -185,3 +204,9 @@ const TransactionHistory: React.FC = () => {
 };  
 
 export default TransactionHistory;  
+
+
+
+
+
+

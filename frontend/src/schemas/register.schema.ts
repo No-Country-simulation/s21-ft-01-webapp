@@ -11,9 +11,10 @@ export const registerSchema = z.object({
     email: z
         .string({ invalid_type_error: "El formato introducido es incorrecto." })
         .email({ message: "Debes introducir un email valido." }),
+    // Ahora acepta string y valida que sea una fecha válida
     birth_date: z
-        .date({ message: "Ingresa una fecha de nacimiento.", invalid_type_error: "El formato introducido es incorrecto." })
-        .refine((val) => !isNaN(val.getTime()), {
+        .string({ message: "Ingresa una fecha de nacimiento.", invalid_type_error: "El formato introducido es incorrecto." })
+        .refine((val) => !isNaN(Date.parse(val)), {
             message: "La fecha no es válida.",
         }),
     phone: z
@@ -28,7 +29,6 @@ export const registerSchema = z.object({
     dni: z
         .string({ invalid_type_error: "El formato introducido es incorrecto" })
         .min(1, { message: "Debes introducir tu número de Dni o Pasaporte" }),
-
     // dni_photo: z
     //     .instanceof(File)
     //     .refine(
@@ -42,15 +42,13 @@ export const registerSchema = z.object({
     password: z
         .string({ message: "La contraseña es obligatoria", invalid_type_error: "El formato introducido es incorrecto." })
         .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
-    repeatpwd: z
+    repeatPwd: z
         .string({ message: "Las contraseñas deben coincidir", invalid_type_error: "El formato introducido es incorrecto." })
         .min(6, { message: "La contraseña debe tener al menos 6 caracteres." })
 
-}).refine((data) => data.password === data.repeatpwd, {
+}).refine((data) => data.password === data.repeatPwd, {
     message: "Las contraseñas no coinciden",
-    path: ["repeatpwd"],
+    path: ["repeatPwd"],
 });
-
-
 
 export type FormDataRegister = z.infer<typeof registerSchema>;

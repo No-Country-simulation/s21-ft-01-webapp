@@ -21,7 +21,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/dashboard"
+            to: "/dashboard",
         },
         {
             id: 2,
@@ -31,7 +31,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/transacciones"
+            to: "/transacciones",
         },
         {
             id: 3,
@@ -41,7 +41,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/wallet"
+            to: "/wallet",
         },
         {
             id: 4,
@@ -51,7 +51,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/Profile"
+            to: "/Profile",
         },
         {
             id: 5,
@@ -61,7 +61,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/settings"
+            to: "/settings",
         },
     ]
 
@@ -69,22 +69,23 @@ const NavbarLeft = () => {
     const location = useLocation();
 
     useEffect(() => {
-        setUrlActive(location.pathname)
-    }, [location.pathname])
+        setUrlActive(location.pathname);
+    }, [location.pathname]);
 
     return (
-        <div className="bg-secondary w-[30%] h-screen px-4 py-8 flex flex-col lg:w-[15%] items-center justify-between">
+        <div className="bg-secondary min-h-screen w-[12%] h-full px-4 py-6 flex flex-col items-start">
 
-            <div className="w-full flex flex-col items-center">
+            <div className="mt-10 w-full flex flex-col items-center">
                 <div>
                     <Logo />
                 </div>
 
                 <nav
-                    className="mt-12 gap-4 flex flex-col items-center w-[80%] text-white font-light">
+                    className="mt-12 gap-4 flex flex-col items-center w-full text-white font-light">
 
-                    {itemsNavbar && itemsNavbar.map((item) => (
+                    {itemsNavbar.map((item) => (
                         <NavbarLeftItem
+                            key={item.id}
                             title={item.title}
                             to={item.to}
                             isActive={urlActive === item.to}
@@ -98,7 +99,7 @@ const NavbarLeft = () => {
 
 
             <div
-                className="mt-12 gap-4 flex flex-col items-center w-[80%] text-white font-light">
+                className="mt-20 text-white font-light">
 
                 <NavbarLeftItem
                     to="about"

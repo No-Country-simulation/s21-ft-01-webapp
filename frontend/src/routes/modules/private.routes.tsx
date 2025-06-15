@@ -2,6 +2,7 @@ import { lazy } from "react";
 import ProtectedRoute from "../ProtectedRoute";
 import { ROUTES } from "../routes";
 import HistoryPage from "../../pages/HistoryPage";
+import Profile from "../../pages/Profile";
 
 const Dashboard = lazy(() => import("../../pages/Dashboard"));
 
@@ -19,6 +20,14 @@ export const PrivateRoutes = [
     element: (
       <ProtectedRoute>
         <HistoryPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.PROFILE,
+    element: (
+      <ProtectedRoute>
+        <Profile />
       </ProtectedRoute>
     ),
   }

@@ -1,3 +1,4 @@
+
 export const ROUTES = {
   // Public Routes
   LOGIN: '/login',
@@ -10,6 +11,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   WALLET: '/wallet',
   HISTORY_TRANSACTION: '/transacciones',
+  PROFILE: '/profile',
 } as const
 
 export type TypeRoutes = keyof typeof ROUTES

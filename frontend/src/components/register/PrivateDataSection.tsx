@@ -91,7 +91,7 @@ const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
                     <label htmlFor="repeatPwd">Repetir contraseña</label>
 
                     <Controller
-                        name="repeatpwd"
+                        name="repeatPwd"
                         control={control}
                         render={({ field }) => (
                             <Password
@@ -107,14 +107,14 @@ const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
                                     input: { style: { width: "100%" } },
                                     root: { style: { width: "100%" } },
                                 }}
-                                invalid={!!errors.repeatpwd}
+                                invalid={!!errors.repeatPwd}
 
                             />
                         )}
                     />
 
-                    {errors.repeatpwd && (
-                        <small className="text-secondary">{errors.repeatpwd?.message}</small>
+                    {errors.repeatPwd && (
+                        <small className="text-secondary">{errors.repeatPwd?.message}</small>
                     )}
 
                 </div>

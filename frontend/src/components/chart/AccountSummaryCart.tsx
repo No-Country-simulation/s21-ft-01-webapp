@@ -1,6 +1,7 @@
 import React from 'react';  
 import { Chart } from 'primereact/chart';  
 import { IconTrendingUp, IconTrendingDown} from '@tabler/icons-react';
+
 interface Transaction {  
     id: string;  
     date: string;  
@@ -83,8 +84,8 @@ const AccountSummaryChart: React.FC = () => {
     };  
 
     return (  
-        <div className="p-4 w-full h-64 relative">  
-            <h1 className="text-xl font-bold text-center text-[#FF6B6B] font-montserrat mb-2">Resumen de cuenta</h1>  
+        <div className="p-4 w-full h-50 relative">  
+            <h1 className="text-l font-bold text-center text-[#FF6B6B] font-montserrat mb-2">Resumen de cuenta</h1>  
             
             {/* Tarjetas de ingresos y gastos */}  
             <div className="flex justify-between mb-4 ">  
@@ -94,7 +95,7 @@ const AccountSummaryChart: React.FC = () => {
                         <IconTrendingUp size={15} color="blue" />
                         <h2 className="font-Montserrat text-xs">Ingresos</h2>
                     </div>
-                        <p className="text-lg font-bold">{totalIncome > 0 ? `$${totalIncome.toFixed(2)}` : '$0.00'}</p>   
+                        <p className="text-mg font-bold">{totalIncome > 0 ? `$${totalIncome.toFixed(2)}` : '$0.00'}</p>   
                 </div>  
 
                 {/* Card de Gastos */}  
@@ -103,7 +104,7 @@ const AccountSummaryChart: React.FC = () => {
                         <IconTrendingDown size={15} color="red" />  
                         <h2 className="font-Montserrat text-xs">Gastos</h2>
                     </div>      
-                        <p className="text-lg font-bold">{totalExpenses > 0 ? `$${totalExpenses.toFixed(2)}` : '$0.00'}</p>  
+                        <p className="text-mg font-bold">{totalExpenses > 0 ? `$${totalExpenses.toFixed(2)}` : '$0.00'}</p>  
                 </div>  
             </div>  
 

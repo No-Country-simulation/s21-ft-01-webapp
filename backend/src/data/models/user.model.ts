@@ -33,12 +33,12 @@ class User extends Model {
                 email: {
                     type: DataTypes.STRING,
                     allowNull: false,
-                    unique: true,
+                    //unique: true,
                 },
                 dni: {
                     type: DataTypes.STRING,
                     allowNull: false,
-                    unique: true,
+                    //unique: true,
                 },
                 dni_url: {
                     type: DataTypes.STRING,
