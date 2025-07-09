@@ -1,54 +1,30 @@
-import { z } from 'zod';
-import { phoneRegex } from '../utils/regex';
+// Esquema de validación deshabilitado para modo demo.
 
+import { z } from 'zod'; 
+
+//Definición del esquema de validación para el formulario de registro usando Zod
 export const registerSchema = z.object({
-    name: z
-        .string({ invalid_type_error: "El formato introducido es incorrecto." })
-        .min(1, { message: "Debes introducir tu nombre" }),
-    last_name: z
-        .string({ invalid_type_error: "El formato introducido es incorrecto." })
-        .min(1, { message: "Debes introducir tu apellido" }),
-    email: z
-        .string({ invalid_type_error: "El formato introducido es incorrecto." })
-        .email({ message: "Debes introducir un email valido." }),
-    // Ahora acepta string y valida que sea una fecha válida
-    birth_date: z
-        .string({ message: "Ingresa una fecha de nacimiento.", invalid_type_error: "El formato introducido es incorrecto." })
-        .refine((val) => !isNaN(Date.parse(val)), {
-            message: "La fecha no es válida.",
-        }),
-    phone: z
-        .string()
-        .refine((val) => phoneRegex.test(val), { message: "Número de teléfono invalido." }),
-    country_id: z
-        .number({ message: "Ingresa un país.", invalid_type_error: "El formato introducido es incorrecto." }),
-    city_id: z
-        .number({ message: "Ingresa una ciudad.", invalid_type_error: "El formato introducido es incorrecto." }),
-    address: z
-        .string({ message: "Ingrese su dirección" }),
-    dni: z
-        .string({ invalid_type_error: "El formato introducido es incorrecto" })
-        .min(1, { message: "Debes introducir tu número de Dni o Pasaporte" }),
-    // dni_photo: z
-    //     .instanceof(File)
-    //     .refine(
-    //         (file) => file?.size > 0,
-    //         { message: "Por favor, carga un archivo de DNI." }
-    //     )
-    //     .refine(
-    //         (file) => file?.type === 'application/pdf',
-    //         { message: "El archivo debe ser un PDF." }
-    //     ),
-    password: z
-        .string({ message: "La contraseña es obligatoria", invalid_type_error: "El formato introducido es incorrecto." })
-        .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
-    repeatPwd: z
-        .string({ message: "Las contraseñas deben coincidir", invalid_type_error: "El formato introducido es incorrecto." })
-        .min(6, { message: "La contraseña debe tener al menos 6 caracteres." })
-
-}).refine((data) => data.password === data.repeatPwd, {
-    message: "Las contraseñas no coinciden",
-    path: ["repeatPwd"],
+    name: z.string().min(1, { message: "El nombre es obligatorio" }),
+    last_name: z.string().min(1, { message: "El apellido es obligatorio" }),
+    email: z.string().min(1, { message: "El email es obligatorio" }).refine((val) => val.includes("@"), { message: "Debe ser un email valido" }),
+    birth_date: z.preprocess(
+        (val) => (typeof val === "string" || val instanceof Date) ? new Date(val) : val,
+        z.date({ required_error: "La fecha de nacimiento es obligatoria" })
+            .max(new Date(), { message: "La fecha debe ser anterior a hoy" })
+    ),
+    phone: z.string()
+        .min(1, { message: "El teléfono es obligatorio" })
+        .regex(/^\d+$/, { message: "El teléfono debe ser numérico" }),
+    country_id: z.string().min(1, { message: "El país es obligatorio" }),
+    province_id: z.string().min(1, { message: "*seleccione una provincia" }),
+    city_id: z.string().min(1, { message: "*seleccione una ciudad" }),
+    address: z.string().min(1, { message: "La dirección es obligatoria" }),
+    doc_type: z.string().min(1, { message: "*seleccione el tipo de documento" }),
+    dni: z.string()
+        .min(1, { message: "El número de documento es obligatorio" })
+        .regex(/^\d+$/, { message: "El número de documento debe ser numérico" }),
+    password: z.string(),
+    repeatPwd: z.string(),
 });
 
 export type FormDataRegister = z.infer<typeof registerSchema>;

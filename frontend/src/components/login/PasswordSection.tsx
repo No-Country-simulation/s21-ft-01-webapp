@@ -12,27 +12,21 @@ const PasswordSection = () => {
             <Controller  
                 name="password"  
                 control={control}  
-                rules={{  
-                    required: "La contraseña es obligatoria",  
-                    minLength: {  
-                        value: 6,  
-                        message: "La contraseña debe tener al menos 6 caracteres",  
-                    },  
-                }}  
                 render={({ field }) => (  
                     <Password  
                         {...field}  
+                        value={field.value ?? ""}  
                         toggleMask  
                         placeholder="Ingresa tu contraseña"  
                         className={errors.password ? 'p-invalid' : ''}  
                     />  
                 )}  
             />  
-            {errors.password && (  
-                <small className="p-error">{errors.password.message}</small>  
+            {errors.password?.message && (  
+                <small className="p-error">{errors.password.message as string}</small>  
             )}  
         </div>  
     );  
 };  
 
-export default PasswordSection;  
+export default PasswordSection;

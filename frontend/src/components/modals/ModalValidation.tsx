@@ -58,7 +58,7 @@ const [errorMessage, setErrorMessage] = useState('');
     const handleSubmit = () => {  
         if (code.join('').length < 6) {  
             setErrorMessage('* Por favor, completa todos los campos con números');  
-            return; // Prevent further execution  
+            return; 
         }  
         
         if (code.join('').length === 6) {
@@ -121,7 +121,7 @@ const [errorMessage, setErrorMessage] = useState('');
                                     ¡Bienvenido al CapyClub!   
                                 </h2> 
                                 <p className="text-grey font-monserrat text-base md:text-lg my-2">
-                                     Ya podés disfrutar los beneficios de CapyBank
+                                    Ya podés disfrutar los beneficios de CapyBank
                                 </p>  
                                 <img   
                                     src={Capymonoculus}   

@@ -10,8 +10,7 @@ import { moveOut, MoveOutForm } from "../../schemas/cashMove.schema";
 import { useForm } from "react-hook-form"; 
 import { zodResolver } from "@hookform/resolvers/zod";  
 import { useTransfer } from "../../hooks/useMoves";  
-import { TransferCash } from "../../types/CashMoves.types";  
-import BlueButton from "../buttons/BlueButton";    
+import { TransferCash } from "../../types/CashMoves.types";    
 import { Link } from 'react-router-dom';  
 import CreditCard from "../../svgs/CreditCard1.svg";
 
@@ -26,11 +25,9 @@ const AsideBar = () => {
         mode: "all",  
         resolver: zodResolver(moveOut),  
     }); 
-    const { mutate: transfer } = useTransfer();  
+    const { mutateAsync: transfer } = useTransfer();  
     const onSubmit = async (data: MoveOutForm) => {  
         setIsPending(true); 
-
-         // Crear el objeto de transferencia  
         const complete_transaction: TransferCash = {  
             ...data,  
             amount: Number(data.amount),  
@@ -42,7 +39,7 @@ const AsideBar = () => {
         try {  
             await transfer(complete_transaction); 
             setTransferSuccess(true);  
-        } catch (error) {  
+        } catch {
             setTransferError("Error al realizar la transferencia, compruebe los datos.");  
         } finally {  
             setIsPending(false);  
@@ -86,7 +83,7 @@ const AsideBar = () => {
                                 <div className="flex flex-col gap-4">  
                                     <InputText  
                                         placeholder="Número de Cuenta"  
-                                        {...register("receiver_account_id", { required: "El número de cuenta es obligatorio" })}
+                                        {...register("receiver_account_id")}
                                         id="receiver_account_id"
                                         invalid={!!errors.receiver_account_id}  
                                         className="w-full"  
@@ -97,7 +94,7 @@ const AsideBar = () => {
 
                                     <InputText  
                                         placeholder="Monto"  
-                                        {...register("amount", { required: "El monto es obligatorio" })}  
+                                        {...register("amount")}
                                         id="amount"  
                                         invalid={!!errors.amount}  
                                         className="w-full"  
@@ -107,7 +104,9 @@ const AsideBar = () => {
                                     )}  
                                 </div>  
 
-                                <BlueButton label="Enviar" type="submit" disabled={isPending} className="mt-4" />  
+                                <button type="submit" className="mt-4 w-full bg-blue-500 text-white py-2 rounded" disabled={isPending}>
+                                    Enviar
+                                </button>
 
                                 {transferSuccess && (  
                                     <p className="text-green-600 mt-2">Transferencia finalizada exitosamente</p>  

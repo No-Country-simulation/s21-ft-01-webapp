@@ -1,4 +1,4 @@
-import { fetcher } from '../utils/fetcher'
-
+// --- MODO DEMO ---
+// Simula el estado de autenticación
 export const getAuthStatus = () =>
-  fetcher<{ isAuthenticated: boolean }>('/auth')
+  Promise.resolve({ isAuthenticated: true });

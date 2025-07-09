@@ -1,82 +1,65 @@
 import React, { useState } from "react";
-import ModalValidation from "../components/modals/ModalValidation";
-
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormDataRegister, registerSchema } from "../schemas/register.schema";
-
+import { useNavigate } from "react-router-dom";
+import ModalValidation from "../components/modals/ModalValidation";
 import RightSide from "../components/register/RightSide";
+import Silueta from "frontend/src/svgs/silueta.png";
 import PersonalSection from "../components/register/PersonalSection";
 import NacionalitySection from "../components/register/NacionalitySection";
 import PrivateDataSection from "../components/register/PrivateDataSection";
 import FooterForm from "../components/register/FooterForm";
-import { useRegister } from "../hooks/useAuth";
+import { registerSchema, FormDataRegister } from "../schemas/register.schema";
 
 const Register: React.FC = () => {
     const [isModalOpen, setModalOpen] = useState(false);
-
-    const { register, handleSubmit, control, trigger, setValue, formState: { errors } } = useForm<FormDataRegister>({
+    const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors }, control } = useForm<FormDataRegister>({
         resolver: zodResolver(registerSchema),
-        mode: "all"
-    })
+        mode: "onSubmit"
+    });
 
-    const { mutate: registerFunction, isSuccess, isPending, isError, error } = useRegister()
-
+    // Guarda los datos en localStorage
     const onSubmit = (data: FormDataRegister) => {
-        registerFunction(data)
+        localStorage.setItem("demoUser", JSON.stringify(data));
         setModalOpen(true);
-        console.log(data);
-    }
+    };
 
     return (
-        <div className="flex md:bg-primary flex-col-reverse md:flex-row min-h-screen items-center justify-center">
+        <div className="flex min-h-screen">
+            {/* Formulario de register */}
+            <div className="w-full md:w-6/12 bg-white flex items-center justify-center p-8">
             <form
-                className=" py-8 px-8 md:grow-1 md:py-8 md:px-8 lg:px-32 min-h-screen bg-white md:min-h-screen text-neutral-600 flex flex-col gap-4"
-                onSubmit={(handleSubmit(onSubmit))}
+                className="w-full max-w-md flex flex-col gap-4"
+                onSubmit={handleSubmit(onSubmit)}
             >
-                <div className="mb-4">
-                    <h4 className="font-bold text-black text-2xl md:text-[32px]">Comencemos
-                        <span className="ml-4">👇</span>
+                {/* Logo */}
+                <div className="flex justify-center mb-8">
+                    <img src={Silueta} alt="Logo" className="w-32 h-32 object-contain" />
+                </div>
+
+                <div className="mb-8 text-center">
+                    <h4 className="font-monserrat text-black text-2xl md:text-[32px]">
+                        <b>Comencemos 👇</b>
                     </h4>
-
                 </div>
 
-                <PersonalSection register={register} errors={errors} />
-
-                <NacionalitySection register={register} control={control} errors={errors} trigger={trigger} setValue={setValue} />
-
-                <PrivateDataSection control={control} register={register} errors={errors} />
-
-                <FooterForm
-                    isPending={isPending} errors={errors}
-                />
-
-                <div>
-
-                    {
-                        isSuccess && (
-                            <p>
-                                {`${isSuccess}`}
-                            </p>
-                        )
-                    }
-
-                    {
-                        isError && error && (
-                            <p className="p-4 bg-red-200">
-                                {`${error.message}`}
-                            </p>
-                        )
-                    }
-
-                </div>
+                <PersonalSection register={register} errors={errors} control={control} />
+                <NacionalitySection register={register} errors={errors} control={control} />
+                <PrivateDataSection register={register} errors={errors} control={control} />
+                <FooterForm errors={errors} />
             </form>
+            </div>
 
+            {/* Modal de validación */}
+            <ModalValidation isOpen={isModalOpen} onClose={() => { setModalOpen(false); navigate("/login"); }} />
+            
+             {/* Componente de la derecha (fondo azul) */}
+            <div className="hidden md:flex md:w-6/12 bg-primary items-center justify-start">
             <RightSide />
-            <ModalValidation isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+            </div>
         </div>
-
-    )
-}
+    );
+};
 
 export default Register;

@@ -1,17 +1,15 @@
 import { Calendar } from "primereact/calendar";  
 import { InputText } from "primereact/inputtext";  
-import { UseFormRegister, FieldErrors } from "react-hook-form";  
-import { UserProfile } from "../../schemas/user.schema"; 
+import { FieldErrors, UseFormRegister, Control, Controller } from "react-hook-form";  
+import { FormDataRegister } from "../../schemas/register.schema";  
 
-interface PersonalSectionProps {  
-    register: UseFormRegister<UserProfile>;  
-    errors: FieldErrors<UserProfile>;  
-}  
+interface Props {  
+    register: UseFormRegister<FormDataRegister>;  
+    errors: FieldErrors<FormDataRegister>;  
+    control: Control<FormDataRegister>;  
+}   
 
-const PersonalSection: React.FC<PersonalSectionProps> = ({  
-    register,  
-    errors,  
-}) => {  
+const PersonalSection: React.FC<Props> = ({ register, errors, control }) => {  
     return (  
         <>  
             <div className="flex flex-wrap items-center justify-between gap-2">  
@@ -19,24 +17,22 @@ const PersonalSection: React.FC<PersonalSectionProps> = ({
                     <label htmlFor="name">Nombre</label>  
                     <InputText  
                         placeholder="Nombre"  
-                        {...register("name")}  
                         id="name"  
-                        invalid={!!errors.name}  
+                        {...register("name")}  
                     />  
                     {errors.name && (  
-                        <small className="text-secondary">{errors.name.message}</small>  
+                        <span className="text-red-500">{errors.name.message as string}</span>  
                     )}  
                 </div>  
                 <div className="flex flex-col gap-4 grow-1">  
                     <label htmlFor="last_name">Apellido</label>  
                     <InputText  
                         placeholder="Apellido"  
-                        {...register("last_name")}  
                         id="last_name"  
-                        invalid={!!errors.last_name}  
+                        {...register("last_name")}  
                     />  
                     {errors.last_name && (  
-                        <small className="text-secondary">{errors.last_name.message}</small>  
+                        <span className="text-red-500">{errors.last_name.message as string}</span>  
                     )}  
                 </div>  
             </div>  
@@ -45,39 +41,56 @@ const PersonalSection: React.FC<PersonalSectionProps> = ({
                 <label htmlFor="email">Correo electrónico</label>  
                 <InputText  
                     placeholder="Correo electrónico"  
-                    {...register("email")}  
                     id="email"  
-                    invalid={!!errors.email}  
+                    {...register("email")}  
                 />  
                 {errors.email && (  
-                    <small className="text-secondary">{errors.email.message}</small>  
+                    <span className="text-red-500">{errors.email.message as string}</span>  
                 )}  
             </div>  
 
             <div className="flex flex-wrap items-center justify-between gap-2">  
                 <div className="flex flex-col gap-4 grow-1">  
                     <label htmlFor="birth_date">Fecha de nacimiento</label>  
-                    <Calendar  
-                        showIcon  
-                        placeholder="Fecha de Nacimiento"  
-                        className="custom-calendar"  
-                        {...register("birth_date")}  
-                        invalid={!!errors.birth_date}  
+                    <Controller  
+                        name="birth_date"  
+                        control={control}  
+                        render={({ field }) => (  
+                            <Calendar  
+                                id="birth_date"  
+                                value={field.value ? new Date(field.value) : null}  
+                                onChange={e => {  
+                                    const date = e.value;  
+                                    if (date instanceof Date && !isNaN(date.getTime())) {  
+                                        // Formato YYYY-MM-DD  
+                                        const yyyy = date.getFullYear();  
+                                        const mm = String(date.getMonth() + 1).padStart(2, '0');  
+                                        const dd = String(date.getDate()).padStart(2, '0');  
+                                        field.onChange(`${yyyy}-${mm}-${dd}`);  
+                                    } else {  
+                                        field.onChange("");  
+                                    }  
+                                }}  
+                                showIcon  
+                                placeholder="Fecha de Nacimiento"  
+                                className="custom-calendar"  
+                                dateFormat="yy-mm-dd"  
+                            />  
+                        )}  
                     />  
                     {errors.birth_date && (  
-                        <small className="text-secondary">{errors.birth_date.message}</small>  
+                        <span className="text-red-500">{errors.birth_date.message as string}</span>  
                     )}  
                 </div>  
                 <div className="flex flex-col gap-4 grow-1">  
                     <label htmlFor="phone">Número de teléfono</label>  
                     <InputText  
                         placeholder="(+54) 1234 5678"  
-                        {...register("phone")}  
                         id="phone"  
-                        invalid={!!errors.phone}  
+                        {...register("phone")}  
                     />  
                     {errors.phone && (  
-                        <small className="text-secondary">{errors.phone.message}</small>  
+                        <span className="text-red-500">{errors.phone.message as string}</span>  
                     )}  
                 </div>  
             </div>  
@@ -85,4 +98,4 @@ const PersonalSection: React.FC<PersonalSectionProps> = ({
     );  
 }  
 
-export default PersonalSection;  
+export default PersonalSection;

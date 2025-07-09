@@ -1,31 +1,38 @@
-import axios from 'axios';  
-import { UserProfile } from '../schemas/user.schema';  
+import { UserProfile } from '../schemas/user.schema';
 
-const API_URL = 'https://localhost:3000/api';    
+// --- MODO DEMO ---
+// Devuelve un perfil de usuario simulado
+export const getUserProfile = async (): Promise<UserProfile> => {
 
-export const getUserProfile = async (): Promise<UserProfile> => {  
-  try {  
-    const response = await axios.get(`${API_URL}/user/profile`, {  
-      headers: {  
-        'Authorization': `Bearer ${localStorage.getItem('token')}`, 
-      },  
-    });  
-    return response.data;  
-  } catch (error) {  
-    console.error("Error al obtener el perfil del usuario:", error);  
-    throw error;   
-  }  
-};  
+  const userStr = localStorage.getItem("demoUser");
+  if (userStr) {
+    const user = JSON.parse(userStr);
+    return {
+      name: user.name,
+      last_name: user.last_name,
+      email: user.email,
+      birth_date: user.birth_date,
+      phone: user.phone
+    };
+  }
+  // ...mock por defecto...
+  return {
+    name: "Demo",
+    last_name: "User",
+    email: "demo@capybank.com",
+    birth_date: "1990-01-01",
+    phone: "+54 11 1234-5678"
+  };
+};
 
-export const updateUserProfile = async (data: UserProfile): Promise<void> => {  
-  try {  
-    await axios.put(`${API_URL}/user/profile`, data, {  
-      headers: {  
-        'Authorization': `Bearer ${localStorage.getItem('token')}`, 
-      },  
-    });  
-  } catch (error) {  
-    console.error("Error al actualizar el perfil del usuario:", error);  
-    throw error; 
-  }  
-}; 
+// Simula la actualización del perfil (no hace nada)
+export const updateUserProfile = async (data: UserProfile): Promise<void> => {
+  // Actualiza el usuario en localStorage si existe
+  const userStr = localStorage.getItem("demoUser");
+  if (userStr) {
+    const user = JSON.parse(userStr);
+    const updated = { ...user, ...data };
+    localStorage.setItem("demoUser", JSON.stringify(updated));
+  }
+  return;
+};

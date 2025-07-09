@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
@@ -8,9 +8,10 @@ import { FormDataLogin, loginSchema } from "../schemas/login.schema";
 import Silueta from "frontend/src/svgs/silueta.png";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import { useLogin } from "../hooks/useAuth";
 
 const Login: React.FC = () => {
+    const [showErrors, setShowErrors] = useState(false);
+    const [loginError, setLoginError] = useState("");
     const {
         handleSubmit,
         register,
@@ -18,13 +19,28 @@ const Login: React.FC = () => {
         formState: { errors }
     } = useForm<FormDataLogin>({
         resolver: zodResolver(loginSchema),
-        mode: "all"
+        mode: "onSubmit"
     });
 
-    const { mutate: login, isPending, error } = useLogin();
-
     const onSubmit = (data: FormDataLogin) => {
-        login(data);
+        setShowErrors(true);
+        // Login demo: busca usuario en localStorage
+        const userStr = localStorage.getItem("demoUser");
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            if (data.email === user.email && data.password === user.password) {
+                setLoginError("");
+                window.location.href = "/dashboard";
+                return;
+            }
+        }
+        // Fallback demo fijo
+        if (data.email === "demo@capybank.com" && data.password === "capy123") {
+            setLoginError("");
+            window.location.href = "/dashboard";
+        } else {
+            setLoginError("Usuario o contraseña incorrectos. Prueba con tu registro o demo@capybank.com / capy123");
+        }
     };
 
     return (
@@ -56,9 +72,9 @@ const Login: React.FC = () => {
                         <InputText
                             {...register("email")}
                             placeholder="Correo electrónico"
-                            className={`w-full ${errors.email ? "p-invalid" : ""}`}
+                            className={`w-full ${showErrors && errors.email ? "p-invalid" : ""}`}
                         />
-                        {errors.email && (
+                        {showErrors && errors.email && (
                             <small className="text-secondary">{errors.email?.message}</small>
                         )}
                     </div>
@@ -74,9 +90,9 @@ const Login: React.FC = () => {
                                     {...field}
                                     toggleMask
                                     placeholder="Contraseña"
-                                    className="w-full"
+                                    className={`w-full ${showErrors && errors.password ? "p-invalid" : ""}`}
                                     feedback={false}
-                                    invalid={!!errors.password}
+                                    invalid={showErrors && !!errors.password}
                                     pt={{
                                         iconField: { root: { style: { width: "100%" } } },
                                         input: { style: { width: "100%" } },
@@ -85,23 +101,22 @@ const Login: React.FC = () => {
                                 />
                             )}
                         />
-                        {errors.password && (
+                        {showErrors && errors.password && (
                             <small className="text-secondary">{errors.password?.message}</small>
                         )}
                     </div>
 
                     {/* Mensaje de error de login */}
-                    {error && <small className="text-red-500">{error.message}</small>}
+                    {loginError && <small className="text-red-500 text-center">{loginError}</small>}
 
                     {/* Botón de envío */}
                     <button
                         type="submit"
-                        disabled={isPending} // Deshabilitamos el botón si está cargando
-                        className={`w-full mt-6 px-6 py-3 rounded-lg font-monserrat transition-colors ${isPending ? "bg-gray-400 cursor-not-allowed" : "bg-primary text-white hover:bg-primary-dark"
-                            }`}
+                        // disabled={isPending}
+                        className={`w-full mt-6 px-6 py-3 rounded-lg font-monserrat transition-colors bg-primary text-white hover:bg-primary-dark`}
                         aria-label="Iniciar sesión"
                     >
-                        {isPending ? "Cargando..." : "Iniciar sesión"}
+                        Iniciar sesión
                     </button>
 
                     {/* Enlace al registro */}

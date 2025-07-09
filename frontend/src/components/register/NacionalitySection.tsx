@@ -1,111 +1,90 @@
 import { Dropdown } from "primereact/dropdown";
-import { PropsFormSubcomponent } from "../../types/FormProps.types";
+import { FieldErrors, UseFormRegister, Controller, Control, useWatch } from "react-hook-form";
 import { FormDataRegister } from "../../schemas/register.schema";
-import { useState } from "react";
-import { useCountries } from "../../hooks/useCountry";
-import { useCities } from "../../hooks/useCities";
-import { InputText } from "primereact/inputtext";
+import { provinces, cities } from "../../data/provincesAndCities";
 
-const NacionalitySection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
-    errors,
-    setValue,
-    trigger,
-    register
-}) => {
+interface Props {
+    register: UseFormRegister<FormDataRegister>;
+    errors: FieldErrors<FormDataRegister>;
+    control: Control<FormDataRegister>;
+} 
 
-    const [selectedCountry, setSelectedCountry] = useState<number | null>(null);
-    const [selectedCity, setSelectedCity] = useState<number | null>(null);
-
-
-    const { data: countries, isLoading: isLoadingCountries } = useCountries();
-    const { data: cities, isLoading: isLoadingCities } = useCities(selectedCountry)
-
+const NacionalitySection: React.FC<Props> = ({ register, errors, control }) => {
+    // Solo Argentina como país
+    const countryOptions = [{ label: "Argentina", value: "Argentina" }];
+    // Observar provincia seleccionada en tiempo real
+    const selectedProvince = useWatch({ control, name: "province_id" });
     return (
         <>
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-col gap-4 grow-1" >
+                <div className="flex flex-col gap-4 grow-1">
                     <label htmlFor="country_id">País</label>
                     <Dropdown
-                        value={selectedCountry}
-                        options={countries}
-                        optionLabel="name"
-                        placeholder={`${isLoadingCountries ? 'Cargando' : 'Seleccione un país'}`}
-                        emptyMessage="No hay paises disponibles"
-                        optionValue="country_id"
-                        className="w-full grow-1"
-                        pt={{
-                            root: {
-                                style: { width: "100%" }
-                            }
-                        }}
                         id="country_id"
-                        invalid={!!errors.country_id}
-                        onChange={(e) => {
-                            const countryId = Number(e.value)
-                            console.log("ID seleccionado:", countryId);
-                            setSelectedCountry(countryId);
-                            setValue!("country_id", countryId, { shouldValidate: true });
-                            trigger!("country_id");
-                        }}
-                        loading={isLoadingCountries}
+                        options={countryOptions}
+                        placeholder="Selecciona un país"
+                        value="Argentina"
+                        disabled
+                        className={errors.country_id ? "p-invalid" : ""}
                     />
-
-                    {errors && errors.country_id && (
-                        <small className="text-secondary">{errors.country_id.message}</small>
-                    )}
+                    {/* Campo oculto para react-hook-form */}
+                    <input type="hidden" value="Argentina" {...register("country_id")} />
+                    {errors.country_id && <span className="text-red-500">{errors.country_id.message as string}</span>}
                 </div>
-
+                <div className="flex flex-col gap-4 grow-1">
+                    <label htmlFor="province_id">Provincia</label>
+                    <Controller
+                        name="province_id"
+                        control={control}
+                        render={({ field }) => (
+                            <Dropdown
+                                id="province_id"
+                                options={provinces.map(p => ({ label: p.name, value: p.id }))}
+                                placeholder="Selecciona una provincia"
+                                value={field.value ?? ""}
+                                onChange={e => field.onChange(e.value ?? "")}
+                                className={errors.province_id ? "p-invalid" : ""}
+                            />
+                        )}
+                    />
+                </div>
                 <div className="flex flex-col gap-4 grow-1">
                     <label htmlFor="city_id">Ciudad</label>
-                    <Dropdown
-                        value={selectedCity}
-                        options={cities}
-                        optionLabel="name"
-                        placeholder={`${isLoadingCities ? 'Cargando' : 'Seleccione una ciudad'}`}
-                        loading={!!isLoadingCities}
-                        optionValue="city_id"
-                        emptyMessage="No hay ciudades disponibles"
-                        className="w-full grow-1"
-                        pt={{
-                            root: {
-                                style: { width: "100%" }
-                            }
-                        }}
-                        id="city_id"
-                        invalid={!!errors.city_id}
-                        onChange={(e) => {
-                            const cityId = Number(e.value);
-                            setSelectedCity(cityId);
-                            setValue!("city_id", cityId, { shouldValidate: true });
-                            trigger!("city_id");
+                    <Controller
+                        name="city_id"
+                        control={control}
+                        render={({ field }) => {
+                            // Filtra ciudades según provincia seleccionada en tiempo real
+                            const filteredCities = cities.filter(c => c.provinceId === selectedProvince);
+                            return (
+                                <Dropdown
+                                    id="city_id"
+                                    options={filteredCities.map(c => ({ label: c.name, value: c.id }))}
+                                    placeholder="Selecciona una ciudad"
+                                    value={field.value ?? ""}
+                                    onChange={e => field.onChange(e.value ?? "")}
+                                    className={errors.city_id ? "p-invalid" : ""}
+                                />
+                            );
                         }}
                     />
-                    {errors && errors.city_id && (
-                        <small className="text-secondary">{errors.city_id.message}</small>
-                    )}
                 </div>
-
-
             </div>
-
             <div className="flex flex-wrap items-center justify-between gap-2">
-
                 <div className="flex flex-col gap-4 grow-1">
                     <label htmlFor="address">Dirección</label>
-                    <InputText
+                    <input
+                        className={`p-inputtext ${errors.address ? "p-invalid" : ""}`}
                         placeholder="Dirección"
-                        {...register("address")}
                         id="address"
-                        invalid={!!errors.address}
+                        autoComplete="off"
+                        {...register("address")}
                     />
-                    {errors && errors.address && (
-                        <small className="text-secondary">{errors.address.message}</small>
-                    )}
+                    {errors.address && <span className="text-red-500">{errors.address.message as string}</span>}
                 </div>
-
             </div>
         </>
-    )
-}
+    );
+};
 
 export default NacionalitySection;

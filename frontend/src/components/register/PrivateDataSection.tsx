@@ -1,126 +1,83 @@
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import Upload from '../../svgs/upload.svg';
-import { PropsFormSubcomponent } from "../../types/FormProps.types";
+import { Dropdown } from "primereact/dropdown";
+import { FieldErrors, UseFormRegister, Control, Controller } from "react-hook-form";
 import { FormDataRegister } from "../../schemas/register.schema";
-import { Controller } from "react-hook-form";
 
+const docTypes = [
+    { label: "DNI", value: "dni" },
+    { label: "Pasaporte", value: "pasaporte" },
+    { label: "Libreta Cívica", value: "libreta_civica" },
+    { label: "Libreta de Enrolamiento", value: "libreta_enrolamiento" }
+];
 
-const PrivateDataSection: React.FC<PropsFormSubcomponent<FormDataRegister>> = ({
-    errors,
-    control,
-    register
-}) => {
+interface Props {
+    register: UseFormRegister<FormDataRegister>;
+    errors: FieldErrors<FormDataRegister>;
+    control: Control<FormDataRegister>;
+}
 
+const PrivateDataSection: React.FC<Props> = ({ register, errors, control }) => {
     return (
         <>
-
             <div className="flex gap-2 items-center justify-between flex-wrap">
-
                 <div className="flex flex-col gap-4 grow-1">
-                    <label htmlFor="dni">Dni o Pasaporte</label>
-                    <InputText
-                        placeholder="Dni o Pasaporte"
-                        {...register("dni")}
-                        id="dni"
-                        invalid={!!errors.dni}
+                    <label htmlFor="doc_type">Tipo de documento</label>
+                    <Controller
+                        name="doc_type"
+                        control={control}
+                        render={({ field }) => (
+                            <Dropdown
+                                id="doc_type"
+                                options={docTypes}
+                                placeholder="Selecciona tipo de documento"
+                                value={field.value ?? ""}
+                                onChange={e => field.onChange(e.value ?? "")}
+                                className={errors.doc_type ? "p-invalid" : ""}
+                            />
+                        )}
                     />
-                    {errors && errors.dni && (
-                        <small className="text-secondary">{errors.dni.message}</small>
-                    )}
+                    {errors.doc_type && <span className="text-red-500">{errors.doc_type.message as string}</span>}
                 </div>
-
                 <div className="flex flex-col gap-4 grow-1">
-                    <label htmlFor="dni_file">Dni o Pasaporte</label>
-
-                    <div
-                        className="relative flex items-center"
-                    >
-                        <InputText
-                            type="file"
-                            className="w-full"
-                            id="dni_file"
-                        // invalid={!!errors.dni_file}
-
-                        // {...register('dni_file')}
-
-                        />
-                        <img
-                            className="absolute top-auto right-3 bg-white p-2"
-                            src={Upload} />
-                    </div>
-
-                    {/* {errors.dni_file && (
-                        <small className="text-secondary">{errors.dni_file?.message}</small>
-                    )} */}
+                    <label htmlFor="dni">Número de documento</label>
+                    <InputText
+                        placeholder="Número de documento"
+                        id="dni"
+                        {...register("dni")}
+                        inputMode="numeric"
+                    />
+                    {errors.dni && <span className="text-red-500">{errors.dni.message as string}</span>}
                 </div>
-
             </div>
-
             <div className="flex gap-2 items-center justify-between flex-wrap">
                 <div className="flex flex-col grow-1 gap-4" >
                     <label htmlFor="password">Contraseña</label>
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field }) => (
-                            <Password
-                                {...field}
-                                toggleMask
-                                placeholder="Contraseña"
-                                className="grow-1 custom-password"
-                                feedback={false}
-                                pt={{
-                                    iconField: {
-                                        root: { style: { width: "100%" } },
-                                    },
-                                    input: { style: { width: "100%" } },
-                                    root: { style: { width: "100%" } },
-                                }}
-                                invalid={!!errors.password}
-                            />
-                        )}
+                    <Password
+                        toggleMask
+                        placeholder="Contraseña"
+                        className={`grow-1 custom-password ${errors.password ? "p-invalid" : ""}`}
+                        feedback={false}
+                        id="password"
+                        {...register("password")}
                     />
-
-                    {errors.password && (
-                        <small className="text-secondary">{errors.password?.message}</small>
-                    )}
+                    {errors.password && <span className="text-red-500">{errors.password.message as string}</span>}
                 </div>
-
                 <div className="flex flex-col gap-4 grow-1">
                     <label htmlFor="repeatPwd">Repetir contraseña</label>
-
-                    <Controller
-                        name="repeatPwd"
-                        control={control}
-                        render={({ field }) => (
-                            <Password
-                                {...field}
-                                toggleMask
-                                placeholder="Repetir contraseña"
-                                feedback={false}
-                                className="grow-1"
-                                pt={{
-                                    iconField: {
-                                        root: { style: { width: "100%" } },
-                                    },
-                                    input: { style: { width: "100%" } },
-                                    root: { style: { width: "100%" } },
-                                }}
-                                invalid={!!errors.repeatPwd}
-
-                            />
-                        )}
+                    <Password
+                        toggleMask
+                        placeholder="Repetir contraseña"
+                        feedback={false}
+                        className={`grow-1 ${errors.repeatPwd ? "p-invalid" : ""}`}
+                        id="repeatPwd"
+                        {...register("repeatPwd")}
                     />
-
-                    {errors.repeatPwd && (
-                        <small className="text-secondary">{errors.repeatPwd?.message}</small>
-                    )}
-
+                    {errors.repeatPwd && <span className="text-red-500">{errors.repeatPwd.message as string}</span>}
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default PrivateDataSection;
