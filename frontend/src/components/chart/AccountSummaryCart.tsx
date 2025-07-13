@@ -32,27 +32,26 @@ const initialTransactions: Transaction[] = [
     { id: '3', date: '2025-03-06', to: 'Subte', category: 'Transporte', amount: -5 },  
     { id: '4', date: '2025-03-06', to: 'Cine', category: 'Entretenimiento', amount: -25 },  
     { id: '5', date: '2025-03-07', to: 'Farmacia', category: 'Salud', amount: -30 },  
-    { id: '6', date: '2025-03-07', to: 'Empresa', category: 'Sueldo', amount: 2000 },  
+    { id: '6', date: '2025-03-07', to: 'Empresa', category: 'Sueldo', amount: 200000 },  
     { id: '7', date: '2025-03-07', to: 'Supermercado', category: 'otros', amount: -80 },  
 ];  
 
 const AccountSummaryChart: React.FC = () => {  
-    // Incluir solo gastos (amount < 0)  
     const expenseTransactions = initialTransactions.filter(transaction => transaction.amount < 0);  
     const incomeTransactions = initialTransactions.filter(transaction => transaction.amount > 0);  
 
-    // Agrupar los gastos por categoría  
     const categoryExpenses = expenseTransactions.reduce((acc, transaction) => {  
         const category = transaction.category;  
         acc[category] = (acc[category] || 0) + Math.abs(transaction.amount);  
         return acc;  
-    }, {});  
+    }, {} as Record<string, number>);  
 
-    // Calcular ingresos totales  
     const totalIncome = incomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);  
     const totalExpenses = expenseTransactions.reduce((sum, transaction) => sum + Math.abs(transaction.amount), 0);  
 
-    // Preparar los datos para el gráfico  
+    // Calcular saldo actual
+    const saldo = incomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0) - totalExpenses;
+
     const labels = Object.keys(categoryExpenses);  
     const dataValues = Object.values(categoryExpenses);  
     const backgroundColors = labels.map(category => categoryStyles[category]?.color || '#808080');  
@@ -95,7 +94,7 @@ const AccountSummaryChart: React.FC = () => {
                         <IconTrendingUp size={15} color="blue" />
                         <h2 className="font-Montserrat text-xs">Ingresos</h2>
                     </div>
-                        <p className="text-mg font-bold">{totalIncome > 0 ? `$${totalIncome.toFixed(2)}` : '$0.00'}</p>   
+                        <p className="text-mg font-bold">{totalIncome > 0 ? `$${totalIncome.toLocaleString()}` : '$0.00'}</p>   
                 </div>  
 
                 {/* Card de Gastos */}  
@@ -104,15 +103,17 @@ const AccountSummaryChart: React.FC = () => {
                         <IconTrendingDown size={15} color="red" />  
                         <h2 className="font-Montserrat text-xs">Gastos</h2>
                     </div>      
-                        <p className="text-mg font-bold">{totalExpenses > 0 ? `$${totalExpenses.toFixed(2)}` : '$0.00'}</p>  
+                        <p className="text-mg font-bold">{totalExpenses > 0 ? `$${totalExpenses.toLocaleString()}` : '$0.00'}</p>  
                 </div>  
             </div>  
+
+            <div className="text-black font-bold mb-2">Saldo actual: ${saldo.toLocaleString()}</div>
 
             <Chart  
                 type="doughnut"  
                 data={data}  
                 options={options}  
-                className="w-full h-full"  
+                className="w-full h-full"  // restaurar tamaño original
             />  
 
             {/* Leyenda personalizada con círculos */}  
@@ -131,4 +132,4 @@ const AccountSummaryChart: React.FC = () => {
     );  
 };  
 
-export default AccountSummaryChart;  
+export default AccountSummaryChart;

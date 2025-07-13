@@ -73,7 +73,7 @@ const NavbarLeft = () => {
     }, [location.pathname]);
 
     return (
-        <div className="bg-secondary min-h-screen w-[12%] h-full px-4 py-6 flex flex-col items-start">
+        <div className="bg-secondary fixed left-0 top-0 min-h-screen h-full w-[12%] px-4 py-6 flex flex-col items-start z-40">
 
             <div className="mt-10 w-full flex flex-col items-center">
                 <div>

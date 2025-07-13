@@ -53,22 +53,9 @@ const categoryStyles: { [key: string]: CategoryStyle } = {
 //    return response.json();  
 //};  
 
-const TransactionHistory: React.FC = () => {  
-    const [selectedMonth, setSelectedMonth] = useState<Date | null>(null); 
-
-
-    // Obtener transacciones del backend  
-    //const { data: transactions = [], error, isLoading, isError } = useQuery({  
-      //  queryKey: ['transactions'],  
-        ///queryFn: fetchTransactions,  
-    //});  
-
-    // Usar datos de ejemplo
-    const transactions = initialTransactions;   
-
-    // Manejo de errores y carga  
-    //if (isLoading) return <p>Cargando...</p>;  
-   // if (isError) return <p>Error: {error?.message}</p>;  
+const TransactionHistory: React.FC = () => {
+    const [selectedMonth, setSelectedMonth] = useState<Date | null>(null);
+    const transactions = initialTransactions;
 
     // Filtro de transacciones por mes  
     const filteredTransactions = selectedMonth  
@@ -165,7 +152,7 @@ const TransactionHistory: React.FC = () => {
     };  
 
     return (  
-        <div className="container mx-0 p-4 font-montserrat relative">  
+        <div className="container mx-0 p-4 font-montserrat relative z-0">  
             <div className="flex items-center justify-between mb-4">  
                 <h1 className="text-2xl md:text-3xl font-bold underline text-blue-500">Historial</h1>  
                 <div className="z-50 relative">  
@@ -203,7 +190,7 @@ const TransactionHistory: React.FC = () => {
     );  
 };  
 
-export default TransactionHistory;  
+export default TransactionHistory;
 
 
 

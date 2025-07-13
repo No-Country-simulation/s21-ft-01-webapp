@@ -23,8 +23,8 @@ export const registerSchema = z.object({
     dni: z.string()
         .min(1, { message: "El número de documento es obligatorio" })
         .regex(/^\d+$/, { message: "El número de documento debe ser numérico" }),
-    password: z.string(),
-    repeatPwd: z.string(),
+    password: z.string().optional(),
+    repeatPwd: z.string().optional(),
 });
 
 export type FormDataRegister = z.infer<typeof registerSchema>;
