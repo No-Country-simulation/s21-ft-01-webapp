@@ -16,7 +16,7 @@ interface Transaction {
     amount: number;  
 }  
 
-// Ejemplo de transacciones (inicializado como un array vacío)  
+// Ejemplo de transacciones  
 const initialTransactions: Transaction[] = [  
     { id: '1', date: '2025-03-05', to: 'Restaurante', category: 'Comida', amount: -50 },  
     { id: '2', date: '2025-03-05', to: 'Tienda de ropa', category: 'Indumentaria', amount: -100 },  

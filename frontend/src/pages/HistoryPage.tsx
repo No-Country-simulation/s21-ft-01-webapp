@@ -9,18 +9,14 @@ const HistoryPage: React.FC = () => {
     const transactionsData: Transaction[] = [];
 
     return (  
-        <div className="min-h-screen flex flex-row">  
-            {/* Navbar a la izquierda */}   
+         <div className="flex">  
+            {/* Navbar a la izquierda */}    
                 <NavbarLeft />  
 
             {/* Main Content */} 
-            <main className="flex-grow flex flex-col md:flex-row p-4">  
-
-               {/* Charts */}
-                <div className="flex md:w-5/8 lg:w-6/8">
-                    <TransactionHistory transactions={transactionsData} />
-                </div>
-                <div className="flex-1 md:w-1/8 lg:w-2/8 mt-4 md:mt-0 md:ml-4">
+            <main className="p-6 flex flex-col gap-8 grow-2 ml-[12%]">
+                <TransactionHistory/>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                     <AccountSummaryChart />
                 </div>
             </main> 
