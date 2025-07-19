@@ -75,8 +75,8 @@ const AsideBar = () => {
     }, []);
 
     return (
-        <aside className="min-h-screen w-[25%] h-screen px-4 py-6 flex flex-col items-start bg-whiteSecondary">
-
+        <aside className="hidden lg:flex flex-col min-h-screen h-screen w-[16rem] max-w-[16rem] px-4 py-6 items-start bg-whiteSecondary">
+        
             <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center h-fit gap-4">
                     <Search

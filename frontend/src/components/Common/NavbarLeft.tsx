@@ -11,6 +11,7 @@ import HelpSVG from "../svg/HelpSVG";
 
 
 const NavbarLeft = () => {
+    const [open, setOpen] = useState(false);
 
     const itemsNavbar = [
         {
@@ -73,8 +74,41 @@ const NavbarLeft = () => {
     }, [location.pathname]);
 
     return (
-        <div className="bg-secondary fixed left-0 top-0 min-h-screen h-full w-[12%] px-4 py-6 flex flex-col items-start z-40">
+        <>
+            {/* Botón hamburguesa solo visible en pantallas chicas */}
+            <button
+                className="fixed top-4 left-4 z-50 lg:hidden bg-secondary p-2 rounded"
+                onClick={() => setOpen(!open)}
+                aria-label="Abrir menú lateral"
+            >
+                <svg width="24" height="24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            
+            {/* Barra lateral */}
 
+            <div 
+                className={`
+                    bg-secondary fixed left-0 top-0 min-h-screen h-full 
+                    w-[70vw] max-w-xs px-4 py-6 flex flex-col items-start z-40
+                    transition-transform duration-300
+                    ${open ? "translate-x-0" : "-translate-x-full"}
+                    lg:translate-x-0 lg:w-[12rem] lg:max-w-xs lg:block
+                `}
+            >
+                {/* Cierra menú en móvil */}
+                <button
+                    className="lg:hidden self-end mb-4"
+                    onClick={() => setOpen(false)}
+                    aria-label="Cerrar menú lateral"
+                >
+                    <svg width="24" height="24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            
+            {/* Logo */}'
             <div className="mt-10 w-full flex flex-col items-center">
                 <div>
                     <Logo />
@@ -98,9 +132,7 @@ const NavbarLeft = () => {
             </div>
 
 
-            <div
-                className="mt-20 text-white font-light">
-
+            <div className="mt-20 text-white font-light">
                 <NavbarLeftItem
                     to="about"
                     title="Ayuda"
@@ -116,7 +148,8 @@ const NavbarLeft = () => {
                 </NavbarLeftItem>
             </div>
         </div>
-    )
-}
+        </>
+    );
+};
 
 export default NavbarLeft;

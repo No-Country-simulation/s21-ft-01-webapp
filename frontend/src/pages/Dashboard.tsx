@@ -6,18 +6,21 @@ import TransactionHistory from "../components/chart/TransactionHistory";
 
 export default function Dashboard() {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-white">
       <NavbarLeft />
-      <main className="p-6 flex flex-col gap-8 grow-2 ml-[12%]">
-        <HeaderDashboard />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+      <main className="flex-1 flex flex-col gap-6 p-4 md:p-8 ml-0 lg:ml-[16rem] transition-all duration-300">
+                <section className="w-full overflow-x-auto">
+          <HeaderDashboard />
+          </section>
+
+        <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <AccountSummaryCart />
-          </div>
+          </div> 
           <div>
             <TransactionHistory />
           </div>
-        </div>
+        </section>
       </main>
       <AsideBar />
     </div>
