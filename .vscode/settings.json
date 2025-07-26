@@ -10,6 +10,7 @@
   "editor.fontFamily": "JetBrains Mono, monospace",
   "terminal.integrated.theme": "synth wave '84",
   "workbench.colorCustomizations.terminalCursor.background": "#fc98ed",
+  "git.ignoreLimitWarning": true,
   
   
 }
