@@ -10,8 +10,9 @@ export const ROUTES = {
   // Privates Routes
   DASHBOARD: '/dashboard',
   WALLET: '/wallet',
-  HISTORY_TRANSACTION: '/transacciones',
+  HISTORY_TRANSACTION: '/transaction',
   PROFILE: '/profile',
-} as const
+  SETTINGS: '/settings',
+} as const;
 
-export type TypeRoutes = keyof typeof ROUTES
+export type TypeRoutes = keyof typeof ROUTES;

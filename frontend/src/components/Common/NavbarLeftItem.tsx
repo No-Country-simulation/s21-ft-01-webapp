@@ -1,13 +1,15 @@
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { ROUTES, TypeRoutes } from "../../routes/routes";
+
 
 
 
 interface NavbarItem {
-    title: string,
-    children: ReactNode,
-    to: string,
-    isActive: boolean
+    title: string;
+    children: ReactNode;
+    to: typeof ROUTES[TypeRoutes];
+    isActive: boolean;
 }
 
 const NavbarLeftItem: React.FC<NavbarItem> = ({
@@ -26,7 +28,7 @@ const NavbarLeftItem: React.FC<NavbarItem> = ({
             {children}
             {title}
         </Link>
-    )
-}
+    );
+};
 
 export default NavbarLeftItem;

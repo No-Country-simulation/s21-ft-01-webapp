@@ -10,7 +10,13 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
 
-    setUser: (user) => set({ user }), 
+    setUser: 
+    (user) => set({ user }), 
 
-    logout: () => set({ user: null }),
+    logout: () => {
+      sessionStorage.removeItem("demoUserProfile"); // Limpiar datos
+      set({ user: null }); // eliminar usuario activo
+    },
+
+
 }));

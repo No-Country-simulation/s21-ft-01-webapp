@@ -8,10 +8,11 @@ import SettingsSVG from "../svg/SettingsSVG";
 import { useEffect, useState } from "react";
 import NavbarLeftItem from "./NavbarLeftItem";
 import HelpSVG from "../svg/HelpSVG";
+import { ROUTES } from "../../routes/routes";
 
 
 const NavbarLeft = () => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false); 
 
     const itemsNavbar = [
         {
@@ -22,7 +23,8 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/dashboard",
+            to: ROUTES.DASHBOARD,
+
         },
         {
             id: 2,
@@ -32,7 +34,8 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/transacciones",
+            to: ROUTES.HISTORY_TRANSACTION,
+
         },
         {
             id: 3,
@@ -42,7 +45,7 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/wallet",
+            to: ROUTES.WALLET,
         },
         {
             id: 4,
@@ -52,7 +55,8 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/Profile",
+            to: ROUTES.PROFILE,
+
         },
         {
             id: 5,
@@ -62,9 +66,10 @@ const NavbarLeft = () => {
                 width={24}
                 height={24}
             />,
-            to: "/settings",
+            to: ROUTES.SETTINGS,
+
         },
-    ]
+    ];
 
     const [urlActive, setUrlActive] = useState("");
     const location = useLocation();
@@ -134,9 +139,10 @@ const NavbarLeft = () => {
 
             <div className="mt-20 text-white font-light">
                 <NavbarLeftItem
-                    to="about"
+                    to={ROUTES.ABOUT}
+
                     title="Ayuda"
-                    isActive={urlActive === 'about'}
+                    isActive={urlActive === ROUTES.ABOUT}
                 >
                     {
                         <HelpSVG

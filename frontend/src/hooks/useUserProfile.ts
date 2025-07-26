@@ -1,42 +1,34 @@
-import { useState, useEffect } from "react";  
-import { getUserProfile, updateUserProfile } from "../service/userService";   
-import { UserProfile } from "../schemas/user.schema"; 
+import { useState, useEffect } from "react";
+import { FormDataRegister } from "../schemas/register.schema";
 
-export const useUserProfile = () => {  
-    const [userData, setUserData] = useState<UserProfile | null>(null);  
-    const [loading, setLoading] = useState(true);  
-    const [error, setError] = useState<string | null>(null);  
+const STORAGE_KEY = "demoUserProfile";
 
-    const fetchUserData = async () => {  
-        try {  
-            setLoading(true);  
-            const data: UserProfile = await getUserProfile(); // Obtiene los datos del usuario  
-            setUserData(data);  // Guardar datos en el estado  
-        } catch (err) {  
-            setError("Error al cargar los datos del usuario.");  
-        } finally {  
-            setLoading(false);  
-        }  
-    };   
+export const useUserProfile = () => {
+  const [userData, setUserData] = useState<FormDataRegister | null>(null);
 
-    useEffect(() => {  
-        fetchUserData();  
-    }, []);  
+  const fetchUserData = () => {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setUserData(JSON.parse(stored));
+    } else {
+      setUserData({
+        name: "Capy",
+        last_name: "Bank",
+        email: "demo@capybank.com",
+        birth_date: "1990-01-01",
+        phone: "541112345678",
+      });
+    }
+  };
 
-    const updateUserProfileData = async (data: UserProfile) => {  
-        try {  
-            await updateUserProfile(data); // Actualiza la información del perfil del usuario  
-            fetchUserData(); // Actualiza los datos después de modificar  
-        } catch (err) {  
-            setError("Error al actualizar el perfil.");  
-        }  
-    };  
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
-    return {  
-        userData,  
-        loading,  
-        error,  
-        updateUserProfileData,  
-    };  
-};  
+  const updateUserProfile = (data: FormDataRegister) => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    setUserData(data);
+  };
 
+  return { userData, updateUserProfile };
+};

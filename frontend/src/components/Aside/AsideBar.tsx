@@ -68,15 +68,15 @@ const AsideBar = () => {
         return `${digits.slice(0,8).join("")}-${digits.slice(8,22).join("")}`;
     };
 
-    // Generar ambos números al montar el componente
+    // Generar ambos números 
     React.useEffect(() => {
         setCardNumber(generateCardNumber());
         setCbuNumber(generateCbuNumber());
     }, []);
 
     return (
-        <aside className="hidden lg:flex flex-col min-h-screen h-screen w-[16rem] max-w-[16rem] px-4 py-6 items-start bg-whiteSecondary">
-        
+        <aside className="hidden lg:flex flex-col min-h-screen h-screen w-[14rem] max-w-[14rem] px-4 py-6 items-start z-40 bg-whiteSecondary">
+
             <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center h-fit gap-4">
                     <Search
