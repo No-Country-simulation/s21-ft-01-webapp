@@ -5,11 +5,12 @@ import { ROUTES, TypeRoutes } from "../../routes/routes";
 
 
 
-interface NavbarItem {
+interface NavbarItem { 
     title: string;
     children: ReactNode;
     to: typeof ROUTES[TypeRoutes];
     isActive: boolean;
+    action?: () => void;
 }
 
 const NavbarLeftItem: React.FC<NavbarItem> = ({
@@ -17,14 +18,25 @@ const NavbarLeftItem: React.FC<NavbarItem> = ({
     children,
     to,
     isActive,
+    action,
 }) => {
 
     const activeClass = "bg-[rgba(255,255,255,.4)] text-secondary"
+    const baseClass = `flex gap-2 items-center justify-start w-full px-4 py-2 rounded-xl transition ${
+        isActive ? activeClass : "hover:bg-[rgba(255,255,255,.2)] text-white"
+    }`;
+
+    if (action) {
+        return (
+            <button onClick={action} className={baseClass}>
+                {children}
+                {title} 
+            </button>
+        );
+    }
 
     return (
-        <Link
-            className={`flex gap-2 items-center justify-start w-full px-4 py-2 rounded-xl ${isActive ? activeClass : ""}`}
-            to={to}>
+        <Link className={baseClass} to={to!}>
             {children}
             {title}
         </Link>

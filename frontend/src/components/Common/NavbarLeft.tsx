@@ -1,18 +1,40 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Logo } from "../svg/Logo";
 import HomeSVG from "../svg/HomeSvg";
 import ChartPieSVG from "../svg/ChartPieSVG";
 import CardSVG from "../svg/CardSVG";
 import UserSVG from "../svg/UserSVG";
 import SettingsSVG from "../svg/SettingsSVG";
-import { useEffect, useState } from "react";
+import { useLogoutModalStore } from "../../store/LogoutModalStore";
 import NavbarLeftItem from "./NavbarLeftItem";
+import { useAuthStore } from "../../store/AuthStore";
+import ModalLogout from "../modals/ModalLogout";
 import HelpSVG from "../svg/HelpSVG";
 import { ROUTES } from "../../routes/routes";
 
 
 const NavbarLeft = () => {
-    const [open, setOpen] = useState(false); 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [urlActive, setUrlActive] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const isOpen = useLogoutModalStore((state) => state.isOpen);
+  const openModal = useLogoutModalStore((state) => state.openModal);
+  const closeModal = useLogoutModalStore((state) => state.closeModal);
+
+  const logout = useAuthStore((state) => state.logout);
+
+    useEffect(() => {
+    setUrlActive(location.pathname);
+    }, [location.pathname]);
+
+    const handleLogout = () => {
+    logout();
+    closeModal();
+    navigate("/login");
+    };
 
     const itemsNavbar = [
         {
@@ -61,22 +83,13 @@ const NavbarLeft = () => {
         {
             id: 5,
             title: "Ajustes",
-            children: <SettingsSVG
-                viewBox="0 0 24 24"
-                width={24}
-                height={24}
+            children: <SettingsSVG 
+            viewBox="0 0 24 24" 
+            width={24} height={24} 
             />,
-            to: ROUTES.SETTINGS,
-
+            action: () => openModal()
         },
     ];
-
-    const [urlActive, setUrlActive] = useState("");
-    const location = useLocation();
-
-    useEffect(() => {
-        setUrlActive(location.pathname);
-    }, [location.pathname]);
 
     return (
         <>
@@ -119,28 +132,24 @@ const NavbarLeft = () => {
                     <Logo />
                 </div>
 
-                <nav
-                    className="mt-12 gap-4 flex flex-col items-center w-full text-white font-light">
-
+                <nav className="mt-12 gap-4 flex flex-col items-center w-full text-white font-light">
                     {itemsNavbar.map((item) => (
                         <NavbarLeftItem
                             key={item.id}
                             title={item.title}
                             to={item.to}
+                            action={item.action}
                             isActive={urlActive === item.to}
                         >
                             {item.children}
                         </NavbarLeftItem>
                     ))}
-
                 </nav>
             </div>
 
-
-            <div className="mt-20 text-white font-light">
+            <div className="mt-20 text-white font-light w-full">
                 <NavbarLeftItem
                     to={ROUTES.ABOUT}
-
                     title="Ayuda"
                     isActive={urlActive === ROUTES.ABOUT}
                 >
@@ -152,8 +161,14 @@ const NavbarLeft = () => {
                         />
                     }
                 </NavbarLeftItem>
-            </div>
+            </div>  
         </div>
+        {/* Modal */}
+            <ModalLogout
+                isOpen={isOpen}
+                onClose={closeModal}
+                onConfirm={handleLogout}
+            />
         </>
     );
 };

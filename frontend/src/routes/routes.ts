@@ -12,7 +12,6 @@ export const ROUTES = {
   WALLET: '/wallet',
   HISTORY_TRANSACTION: '/transaction',
   PROFILE: '/profile',
-  SETTINGS: '/settings',
 } as const;
 
 export type TypeRoutes = keyof typeof ROUTES;
