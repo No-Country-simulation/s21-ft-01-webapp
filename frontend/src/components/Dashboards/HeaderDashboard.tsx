@@ -1,10 +1,12 @@
 import { useAuthStore } from "../../store/AuthStore";
 import AnualResume from "./AnualResume";
+import { useNavigate } from "react-router-dom";
 
 
 const HeaderDashboard = () => {
 
     const user = useAuthStore((state) => state.user);
+    const navigate = useNavigate();
 
     return (
         <div className="flex gap-12">
@@ -29,7 +31,7 @@ const HeaderDashboard = () => {
 
                     </div>
 
-                    <button className="text-center w-full my-4 p-2 rounded-xl bg-secondary text-white font-normal cursor-pointer border-secondary border-1 hover:bg-white hover:text-secondary">
+                    <button onClick={() => navigate("/wallet#transfer")} className="text-center w-full my-4 p-2 rounded-xl bg-secondary text-white font-normal cursor-pointer border-secondary border-1 hover:bg-white hover:text-secondary">
                         Hacer una Transferencia
                     </button>
 

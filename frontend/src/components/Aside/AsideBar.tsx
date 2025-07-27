@@ -156,7 +156,6 @@ const AsideBar = () => {
 
             <ModalTransferencia isOpen={showModal} onClose={() => { setShowModal(false); reset(); setTransferSuccess(false); setTransferError(""); setIsPending(false); }} />
 
-            {/* Modal de CBU eliminado, ahora se muestra directamente en la billetera */}
         </aside>
     );
 };
